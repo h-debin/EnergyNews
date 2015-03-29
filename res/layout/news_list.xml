@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <com.energynews.app.layout.TitleLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    </com.energynews.app.layout.TitleLayout>
+    <fragment 
+        android:id="@+id/news_title_fragment"
+        android:name="com.energynews.app.fragment.NewsTitleFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>
