@@ -3,27 +3,20 @@ package com.energynews.app.fragment;
 import android.app.Fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import java.net.URLEncoder;
 import java.util.List;
-import java.util.ArrayList;
 
 import com.energynews.app.R;
 import com.energynews.app.activity.NewsContentActivity;
-import com.energynews.app.activity.NewsListActivity;
-import com.energynews.app.adapter.NewsAdapter;
+import com.energynews.app.data.NewsManager;
 import com.energynews.app.db.EnergyNewsDB;
 import com.energynews.app.model.News;
 import com.energynews.app.service.AutoUpdateService;
@@ -31,42 +24,30 @@ import com.energynews.app.util.HttpCallbackListener;
 import com.energynews.app.util.HttpUtil;
 import com.energynews.app.util.LogUtil;
 import com.energynews.app.util.Utility;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
-public class NewsTitleFragment extends Fragment implements OnItemClickListener {
-
-	public static final String API_ADRESS_PRE = "http://api.minghe.me/api/v1/news?emotion_type=";
-	public static final String EMOTION_TYPE__HAO = "好";
-	public static final String EMOTION_TYPE__LE = "乐";
-	public static final String EMOTION_TYPE__NU = "怒";
-	public static final String EMOTION_TYPE__AI = "哀";
-	public static final String EMOTION_TYPE__JU = "惧";
-	public static final String EMOTION_TYPE__E = "恶";
-	public static final String EMOTION_TYPE__JING = "惊";
+public class NewsTitleFragment extends Fragment {
 	
-	private String currentEmotionType;
-	
-	private ListView newsTitleListView;
-	private List<News> newsList = new ArrayList<News>();
+	private TextView titleText;
+	private ImageView titleImage;
 	private boolean isTwoPane;
 	private EnergyNewsDB energyNewsDB;
-	private NewsAdapter adapter;
 	private ProgressDialog progressDialog;
+	
+	private int emotionChangeType = 1;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		adapter = new NewsAdapter(activity, R.layout.news_item, newsList);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-		currentEmotionType = EMOTION_TYPE__HAO; 
-		View view = inflater.inflate(R.layout.news_title_frag, container, false);
+		View view = inflater.inflate(R.layout.news_item, container, false);
+		titleText = (TextView) view.findViewById(R.id.news_title_text);
+		titleImage = (ImageView) view.findViewById(R.id.news_image);
 		energyNewsDB = EnergyNewsDB.getInstance(getActivity());
-		newsTitleListView = (ListView) view.findViewById(R.id.news_title_list_view);
-		newsTitleListView.setAdapter(adapter);
-		newsTitleListView.setOnItemClickListener(this);
 		AutoUpdateService.actionStart(getActivity());//启动自动更新数据库服务
 		queryNewsList();//加载新闻列表
 		refreshFromServer();//刷新
@@ -84,43 +65,69 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 		}
 	}
 	
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		News news = newsList.get(position);
-		if (isTwoPane) {
-			//NewsContentFragment newsContentFragment = (NewsContentFragment)
-			//		getFragmentManager().findFragmentById(R.id.news_content_fragment);
-			//newsContentFragment.refresh(news.getTitle(), news.getContent());
-		} else {
+	public void changeNews(int changeType) {
+		NewsManager.getInstance(getActivity()).changeNews(changeType);
+		showNewsTitle();
+	}
+
+	public void changeEmotion(int changeType) {
+		emotionChangeType = changeType;
+		String emotion = NewsManager.getInstance(getActivity()).changeEmotion(changeType);
+		TextView homeTitle = (TextView) getActivity().findViewById(R.id.title_text);
+		homeTitle.setText("今日" + emotion + "闻");
+		queryNewsList();
+	}
+	
+	public void showNewsContent() {
+		News news = NewsManager.getInstance(getActivity()).getCurrentNews();
+		if (news != null) {
 			NewsContentActivity.actionStart(getActivity(), news.getLink());
 		}
 	}
 	
-	private void queryNewsList() {
-		List<News> newslistLoad = energyNewsDB.queryNewsByEmotionType(currentEmotionType);
-		if (newslistLoad.size() > 0) {
-			newsList.clear();
-			for (News news : newslistLoad) {
-				newsList.add(news);
+	private void showNewsTitle() {
+		News news = NewsManager.getInstance(getActivity()).getCurrentNews();
+		if (news != null) {
+			titleText.setText(news.getTitle());
+			String imgUrl = news.getPicture();
+			if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl)) {
+				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
+			} else {
+				//viewHolder.newsTitleText.setVisibility(View.GONE);
+				imgUrl="http://h.hiphotos.baidu.com/image/pic/item/b151f8198618367a0d517ec22c738bd4b21ce5d1.jpg";
+				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
 			}
-			adapter.notifyDataSetChanged();
-			newsTitleListView.setSelection(0);
+		}
+	}
+	
+	private void queryNewsList() {
+		List<News> newslistLoad = energyNewsDB.queryNewsByEmotionType(
+				NewsManager.getInstance(getActivity()).getCurrentEmotionType());
+		if (newslistLoad.size() > 0) {
+			NewsManager.getInstance(getActivity()).resetNewsList();
+			for (News news : newslistLoad) {
+				NewsManager.getInstance(getActivity()).addToNewsList(news);
+			}
+			showNewsTitle();
 		} else {
-			//String address = "http://api.minghe.me/api/v1/news?emotion_type=%E5%A5%BD";
-			queryFromServer(API_ADRESS_PRE + currentEmotionType);
-			//queryFromServer(address);
+			queryFromServer(NewsManager.getInstance(getActivity()).getApiAddress());
+		}
+	}
+	
+	/**
+	 * 无数据加载的时候
+	 */
+	public void noDataSave() {
+		List<News> newslistLoad = energyNewsDB.queryNewsByEmotionType(
+				NewsManager.getInstance(getActivity()).getCurrentEmotionType());
+		if (newslistLoad.size() <= 0) {
+			changeEmotion(emotionChangeType);//用下一种情绪继续查找
 		}
 	}
 	
 	public void refreshFromServer() {
 		if (getActivity() == null) return;
-		String etype = "";
-		try {
-			etype = URLEncoder.encode(currentEmotionType, "UTF-8");
-		} catch (Exception e) {
-			return;
-		}
-		String address = API_ADRESS_PRE + etype;
+		String address = NewsManager.getInstance(getActivity()).getApiAddress();
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
 			public void onFinish(String response) {
@@ -133,6 +140,8 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 							queryNewsList();
 						}
 					});
+				} else {
+					noDataSave();
 				}
 			}
 
@@ -171,7 +180,8 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 						@Override
 						public void run() {
 							closeProgressDialog();
-							Toast.makeText(getActivity(),"无数据加载", Toast.LENGTH_SHORT).show();
+							noDataSave();
+							//Toast.makeText(getActivity(),"无数据加载", Toast.LENGTH_SHORT).show();
 						}
 					});
 				}

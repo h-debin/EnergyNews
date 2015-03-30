@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="今日喜闻 能量指数:100"
+        android:text="今日喜闻"
         android:textSize="20sp"
         />
     <Button 
