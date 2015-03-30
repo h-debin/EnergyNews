@@ -7,6 +7,7 @@ import com.energynews.app.adapter.*;
 import com.energynews.app.db.EnergyNewsDB;
 import com.energynews.app.model.News;
 import com.energynews.app.R;
+import com.energynews.app.service.AutoUpdateService;
 import com.energynews.app.util.*;
 
 import android.app.Activity;
@@ -27,5 +28,11 @@ public class NewsListActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.news_list);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		AutoUpdateService.actionStop(this);
+		super.onDestroy();
 	}
 }

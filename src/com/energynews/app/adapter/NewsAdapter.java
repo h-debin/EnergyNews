@@ -44,7 +44,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
 		String imgUrl = news.getPicture();
 		if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl)) {
 			UrlImageViewHelper.setUrlDrawable(viewHolder.newsImage, imgUrl);
-			Log.e("NewsAdapter", imgUrl);
+			//Log.e("NewsAdapter", imgUrl);
 		} else {
 			//viewHolder.newsTitleText.setVisibility(View.GONE);
 			imgUrl="http://h.hiphotos.baidu.com/image/pic/item/b151f8198618367a0d517ec22c738bd4b21ce5d1.jpg";

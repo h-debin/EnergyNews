@@ -25,6 +25,11 @@ public class AutoUpdateService extends Service {
 		context.startService(intent);
 	}
 	
+	public static void actionStop(Context context) {
+		Intent intent = new Intent(context, AutoUpdateService.class);
+		context.stopService(intent);
+	}
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -49,6 +54,9 @@ public class AutoUpdateService extends Service {
 	 * 更新新闻信息。
 	 */
 	private void updateNews() {
+		//删除旧新闻
+		int yestoday = Utility.getDays() - 1;
+		EnergyNewsDB.getInstance(this).deleteOldNews(yestoday);
 		String address = "";
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override

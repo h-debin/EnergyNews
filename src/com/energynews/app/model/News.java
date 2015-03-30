@@ -6,6 +6,7 @@ public class News {
 	private String title;
 	private String link;
 	private String picture;
+	private String emotionType;
 	private int leValue;
 	private int haoValue;
 	private int nuValue;
@@ -13,6 +14,7 @@ public class News {
 	private int juValue;
 	private int eValue;
 	private int jingValue;
+	private int updateTime;
 	
 	public int getId() {
 		return id;
@@ -25,6 +27,9 @@ public class News {
 	}
 	public String getPicture() {
 		return picture;
+	}
+	public String getEmotionType() {
+		return emotionType;
 	}
 	public int getLeValue() {
 		return leValue;
@@ -47,6 +52,9 @@ public class News {
 	public int getJingValue() {
 		return jingValue;
 	}
+	public int getUpdateTime() {
+		return updateTime;
+	}
 	
 	public void setId(int id) {
 		this.id = id;
@@ -59,6 +67,9 @@ public class News {
 	}
 	public void setPicture(String picture) {
 		this.picture = picture;
+	}
+	public void setEmotionType(String emotionType) {
+		this.emotionType = emotionType;
 	}
 	public void setLeValue(int leValue) {
 		this.leValue = leValue;
@@ -80,6 +91,9 @@ public class News {
 	}
 	public void setJingValue(int jingValue) {
 		this.jingValue = jingValue;
+	}
+	public void setUpdateTime(int updateTime) {
+		this.updateTime = updateTime;
 	}
 
 }

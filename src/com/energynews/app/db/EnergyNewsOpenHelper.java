@@ -15,13 +15,15 @@ public class EnergyNewsOpenHelper extends SQLiteOpenHelper {
 			+ "title text, "
 			+ "link text, "
 			+ "picture text, "
+			+ "emotion_type text, "
 			+ "le_value integer, "
 			+ "hao_value integer, "
 			+ "nu_value integer, "
 			+ "ai_value integer, "
 			+ "ju_value integer, "
 			+ "e_value integer, "
-			+ "jing_value integer)";
+			+ "jing_value integer, "
+			+ "update_time integer)";
 	
 	public EnergyNewsOpenHelper(Context context, String name, CursorFactory factory,
 			int version) {

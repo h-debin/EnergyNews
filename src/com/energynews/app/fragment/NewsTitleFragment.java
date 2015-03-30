@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -28,16 +29,27 @@ import com.energynews.app.model.News;
 import com.energynews.app.service.AutoUpdateService;
 import com.energynews.app.util.HttpCallbackListener;
 import com.energynews.app.util.HttpUtil;
+import com.energynews.app.util.LogUtil;
 import com.energynews.app.util.Utility;
 
 public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 
+	public static final String API_ADRESS_PRE = "http://api.minghe.me/api/v1/news?emotion_type=";
+	public static final String EMOTION_TYPE__HAO = "好";
+	public static final String EMOTION_TYPE__LE = "乐";
+	public static final String EMOTION_TYPE__NU = "怒";
+	public static final String EMOTION_TYPE__AI = "哀";
+	public static final String EMOTION_TYPE__JU = "惧";
+	public static final String EMOTION_TYPE__E = "恶";
+	public static final String EMOTION_TYPE__JING = "惊";
+	
+	private String currentEmotionType;
+	
 	private ListView newsTitleListView;
 	private List<News> newsList = new ArrayList<News>();
 	private boolean isTwoPane;
 	private EnergyNewsDB energyNewsDB;
 	private NewsAdapter adapter;
-	private final String apiAdress = "http://api.minghe.me/api/v1/news";
 	private ProgressDialog progressDialog;
 	
 	@Override
@@ -49,7 +61,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-		
+		currentEmotionType = EMOTION_TYPE__HAO; 
 		View view = inflater.inflate(R.layout.news_title_frag, container, false);
 		energyNewsDB = EnergyNewsDB.getInstance(getActivity());
 		newsTitleListView = (ListView) view.findViewById(R.id.news_title_list_view);
@@ -57,6 +69,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 		newsTitleListView.setOnItemClickListener(this);
 		AutoUpdateService.actionStart(getActivity());//启动自动更新数据库服务
 		queryNewsList();//加载新闻列表
+		refreshFromServer();//刷新
 		return view;
 	}
 	
@@ -84,7 +97,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 	}
 	
 	private void queryNewsList() {
-		List<News> newslistLoad = energyNewsDB.loadNews();
+		List<News> newslistLoad = energyNewsDB.queryNewsByEmotionType(currentEmotionType);
 		if (newslistLoad.size() > 0) {
 			newsList.clear();
 			for (News news : newslistLoad) {
@@ -93,24 +106,34 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 			adapter.notifyDataSetChanged();
 			newsTitleListView.setSelection(0);
 		} else {
-			queryFromServer();
+			//String address = "http://api.minghe.me/api/v1/news?emotion_type=%E5%A5%BD";
+			queryFromServer(API_ADRESS_PRE + currentEmotionType);
+			//queryFromServer(address);
 		}
 	}
 	
 	public void refreshFromServer() {
 		if (getActivity() == null) return;
-		String address = apiAdress;
+		String etype = "";
+		try {
+			etype = URLEncoder.encode(currentEmotionType, "UTF-8");
+		} catch (Exception e) {
+			return;
+		}
+		String address = API_ADRESS_PRE + etype;
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
 			public void onFinish(String response) {
-				Utility.handleEnergyNewsResponse(energyNewsDB, response);
-				// 通过runOnUiThread()方法回到主线程处理逻辑
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						queryNewsList();
-					}
-				});
+				boolean savedSuccess = Utility.handleEnergyNewsResponse(energyNewsDB, response);
+				if (savedSuccess) {
+					// 通过runOnUiThread()方法回到主线程处理逻辑
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							queryNewsList();
+						}
+					});
+				}
 			}
 
 			@Override
@@ -126,22 +149,32 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 		});
 	}
 	
-	private void queryFromServer() {
+	private void queryFromServer(String address) {
 		if (getActivity() == null) return;
-		String address = apiAdress;
 		showProgressDialog();
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
 			public void onFinish(String response) {
-				Utility.handleEnergyNewsResponse(energyNewsDB, response);
-				// 通过runOnUiThread()方法回到主线程处理逻辑
-				getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						closeProgressDialog();
-						queryNewsList();
-					}
-				});
+				boolean savedSuccess = Utility.handleEnergyNewsResponse(energyNewsDB, response);
+				if (savedSuccess) {
+					// 通过runOnUiThread()方法回到主线程处理逻辑
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							closeProgressDialog();
+							queryNewsList();//如果有新的数据,则刷新页面
+						}
+					});
+				} else {
+					// 通过runOnUiThread()方法回到主线程处理逻辑
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							closeProgressDialog();
+							Toast.makeText(getActivity(),"无数据加载", Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
 			}
 
 			@Override
