@@ -19,7 +19,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="今日好新闻"
-        android:textSize="20sp"
+        android:textSize="24sp"
         />
     <Button 
         android:id="@+id/refresh"

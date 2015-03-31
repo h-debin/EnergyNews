@@ -3,11 +3,15 @@ package com.energynews.app.fragment;
 import android.app.Fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
@@ -41,6 +45,8 @@ public class NewsTitleFragment extends Fragment {
 	private ProgressDialog progressDialog;
 	private NewsListActivity myActivity;
 	
+	private static final int colorBg = 1000;
+	
 	private String TAG = "NewsTitleFragment";
 	
 	private int emotionChangeType = 1;
@@ -55,8 +61,8 @@ public class NewsTitleFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.news_item_frame, container, false);
-		titleImage = (ImageView) view.findViewById(R.id.news_image);
 		titleTextView = (TextView) view.findViewById(R.id.news_title_text);
+		titleImage = (ImageView) view.findViewById(R.id.news_image);
 		titleImage.setScaleType(ImageView.ScaleType.FIT_XY);
 		energyNewsDB = EnergyNewsDB.getInstance(getActivity());
 		int yestoday = Utility.getDays() - 1;
@@ -145,14 +151,10 @@ public class NewsTitleFragment extends Fragment {
 			myActivity.changeEmotionTitleText();//改变情绪标题
 			titleTextView.setText(news.getTitle());
 			String imgUrl = news.getPicture();
-			if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl) && imgUrl.contains("http")) {
-				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
-			} else {
-				//viewHolder.newsTitleText.setVisibility(View.GONE);
+			if ("null".equals(imgUrl) || TextUtils.isEmpty(imgUrl) || !imgUrl.contains("http")) {
 				imgUrl="http://h.hiphotos.baidu.com/image/pic/item/b151f8198618367a0d517ec22c738bd4b21ce5d1.jpg";
-				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
 			}
-			//LogUtil.e("showNewsTitle","URL:"+imgUrl);
+			UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
 		}
 	}
 	
