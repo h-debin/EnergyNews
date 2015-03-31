@@ -2,6 +2,7 @@ package com.energynews.app.layout;
 
 import com.energynews.app.R;
 import com.energynews.app.fragment.NewsTitleFragment;
+import com.energynews.app.util.ActivityCollector;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -27,15 +28,18 @@ public class TitleLayout extends LinearLayout implements OnClickListener {
 		titleText = (TextView) findViewById(R.id.title_text);
 		homeTitle = (Button) findViewById(R.id.home_button);
 		homeTitle.setOnClickListener(this);
+		homeTitle.setVisibility(View.GONE);
 		refresh = (Button) findViewById(R.id.refresh);
 		refresh.setOnClickListener(this);
+		refresh.setVisibility(View.GONE);
 	}
 	
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.home_button:
-			((Activity) getContext()).finish();
+			//((Activity) getContext()).finish();
+			ActivityCollector.finishAll();
 			break;
 		case R.id.refresh:
 			NewsTitleFragment newsTitleFrag = (NewsTitleFragment) (((Activity) getContext()).

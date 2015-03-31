@@ -5,6 +5,7 @@
     android:orientation="vertical" >
     
     <com.energynews.app.layout.TitleLayout 
+        android:id="@+id/news_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >

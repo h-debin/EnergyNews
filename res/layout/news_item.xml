@@ -13,8 +13,6 @@
     	android:textSize="18sp"
     	android:paddingLeft="10dp"
     	android:paddingRight="10dp"
-    	android:paddingTop="15dp"
-    	android:paddingBottom="15dp"
         />
     
     <ImageView 

@@ -1,10 +1,10 @@
 package com.energynews.app.service;
 
-import com.energynews.app.activity.NewsContentActivity;
 import com.energynews.app.db.EnergyNewsDB;
 import com.energynews.app.receiver.AutoUpdateReceiver;
 import com.energynews.app.util.HttpCallbackListener;
 import com.energynews.app.util.HttpUtil;
+import com.energynews.app.util.LogUtil;
 import com.energynews.app.util.Utility;
 
 import android.app.AlarmManager;
@@ -12,10 +12,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class AutoUpdateService extends Service {
@@ -43,7 +41,7 @@ public class AutoUpdateService extends Service {
 			}
 		}).start();
 		AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		int anHour = 1 * 60 * 60 * 1000; // 这是8小时的毫秒数
+		int anHour = 1 * 60 * 60 * 1000; // 这是毫秒数
 		long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
 		Intent i = new Intent(this, AutoUpdateReceiver.class);
 		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
@@ -58,11 +56,12 @@ public class AutoUpdateService extends Service {
 		int yestoday = Utility.getDays() - 1;
 		EnergyNewsDB.getInstance(this).deleteOldNews(yestoday);
 		String address = "";
+		LogUtil.e("AutoUpdateService","updateNews()........");
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
 			public void onFinish(String response) {
-				Log.d("TAG", response);
-				Utility.handleEnergyNewsResponse(EnergyNewsDB.getInstance(AutoUpdateService.this), response);
+				Utility.handleEnergyNewsResponse(EnergyNewsDB.getInstance(AutoUpdateService.this), 
+						response);
 			}
 			@Override
 			public void onError(Exception e) {

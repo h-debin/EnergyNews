@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#ff0000" >
     
     <Button 
         android:id="@+id/home_button"
@@ -17,7 +18,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="今日喜闻"
+        android:text="今日好新闻"
         android:textSize="20sp"
         />
     <Button 

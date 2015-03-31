@@ -3,8 +3,11 @@ package com.energynews.app.data;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import android.graphics.Color;
 
+import com.energynews.app.db.EnergyNewsDB;
 import com.energynews.app.model.News;
+import com.energynews.app.util.LogUtil;
 
 import android.content.Context;
 
@@ -12,6 +15,10 @@ public class NewsManager {
 	
 	public static final String API_ADRESS_PRE = "http://api.minghe.me/api/v1/news?emotion_type=";
 	public static final String[] EMOTION_TYPE = {"好","乐","怒","哀","惧","恶","惊"};
+	private static final int startColor = Color.RED;//当前情绪的标题颜色start + n*colorDis
+	private static final int colorDis = 1000;
+	
+	private static boolean[] isEmotionRequested = {false,false,false,false,false,false,false};
 	
 	private int currentEmotionTypeId;
 	private int currentNewsId;//当前新闻在newsList中的索引
@@ -19,13 +26,15 @@ public class NewsManager {
 	private List<News> newsList = new ArrayList<News>();
 	
 	private static NewsManager mNewsManager = null;
+	private static EnergyNewsDB db;
 	
 	/**
 	 * 将构造方法私有化
 	 */
 	private NewsManager(Context context) {
-		setCurrentEmotionType(0);
+		setCurrentEmotionTypeId(0);
 		setCurrentNewsId(-1);
+		db = EnergyNewsDB.getInstance(context);
 	}
 	
 	/**
@@ -48,14 +57,17 @@ public class NewsManager {
 	public void addToNewsList(News news) {
 		newsList.add(news);
 	}
-	private void setCurrentEmotionType(int emotionTypeId) {
+	private void setCurrentEmotionTypeId(int emotionTypeId) {
 		currentEmotionTypeId = emotionTypeId;
 	}
-	private int setCurrentEmotionTypeId() {
+	private int getCurrentEmotionTypeId() {
 		return currentEmotionTypeId;
 	}
 	public String getCurrentEmotionType() {
 		return EMOTION_TYPE[currentEmotionTypeId];
+	}
+	public int getCurrentEmotionColor() {
+		return startColor + colorDis * currentEmotionTypeId;
 	}
 	private void setCurrentNewsId(int newsId) {
 		currentNewsId = newsId;
@@ -85,13 +97,13 @@ public class NewsManager {
 	 */
 	public String changeEmotion(int changeType) {
 		int len = EMOTION_TYPE.length;
-		int emotionId = setCurrentEmotionTypeId();
+		int emotionId = getCurrentEmotionTypeId();
 		if (changeType >= 0) {
 			emotionId = (1 + emotionId) % len;
 		} else {
 			emotionId = (emotionId - 1 + len) % len;
 		}
-		setCurrentEmotionType(emotionId);
+		setCurrentEmotionTypeId(emotionId);
 		return getCurrentEmotionType();
 	}
 	/**
@@ -106,6 +118,38 @@ public class NewsManager {
 			currentNewsId = (currentNewsId - 1 + len) % len;
 		}
 		return getCurrentNews();
+	}
+
+	/**
+	 * 查询当前类型的数据是否存在
+	 * @param saveList 是否需要保存新闻列表
+	 * @return 是否存在数据
+	 */
+	public boolean queryNewsList(boolean saveList) {
+		List<News> newslistLoad = db.queryNewsByEmotionType(getCurrentEmotionType());
+		if (newslistLoad.size() <= 0) {
+			return false;
+		}
+		if (saveList) {
+			resetNewsList();
+			for (News news : newslistLoad) {
+				addToNewsList(news);
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 判断该情绪是否从服务器上更新过
+	 * @return
+	 */
+	public boolean isCurrentEmotionRequested() {
+		return isEmotionRequested[currentEmotionTypeId];
+	}
+	public void setCurrentEmotionRequested() {
+		if (currentEmotionTypeId >= 0) {
+			isEmotionRequested[currentEmotionTypeId] = true;
+		}
 	}
 
 }

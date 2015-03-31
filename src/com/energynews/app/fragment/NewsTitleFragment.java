@@ -3,11 +3,15 @@ package com.energynews.app.fragment;
 import android.app.Fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,8 +20,10 @@ import java.util.List;
 
 import com.energynews.app.R;
 import com.energynews.app.activity.NewsContentActivity;
+import com.energynews.app.activity.NewsListActivity;
 import com.energynews.app.data.NewsManager;
 import com.energynews.app.db.EnergyNewsDB;
+import com.energynews.app.layout.TitleLayout;
 import com.energynews.app.model.News;
 import com.energynews.app.service.AutoUpdateService;
 import com.energynews.app.util.HttpCallbackListener;
@@ -28,29 +34,71 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 public class NewsTitleFragment extends Fragment {
 	
-	private TextView titleText;
+	private TextView titleTextView;
 	private ImageView titleImage;
 	private boolean isTwoPane;
 	private EnergyNewsDB energyNewsDB;
 	private ProgressDialog progressDialog;
+	private NewsListActivity myActivity;
+	
+	private String TAG = "NewsTitleFragment";
 	
 	private int emotionChangeType = 1;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		myActivity = (NewsListActivity) activity;
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.news_item, container, false);
-		titleText = (TextView) view.findViewById(R.id.news_title_text);
+		View view = inflater.inflate(R.layout.news_item_frame, container, false);
 		titleImage = (ImageView) view.findViewById(R.id.news_image);
+		titleTextView = (TextView) view.findViewById(R.id.news_title_text);
+		titleImage.setScaleType(ImageView.ScaleType.FIT_XY);
 		energyNewsDB = EnergyNewsDB.getInstance(getActivity());
-		AutoUpdateService.actionStart(getActivity());//启动自动更新数据库服务
-		queryNewsList();//加载新闻列表
-		refreshFromServer();//刷新
+		int yestoday = Utility.getDays() - 1;
+		energyNewsDB.deleteOldNews(yestoday);//删除一天之前的旧新闻
+		queryNewsList(true);//加载新闻列表
+		queryFromServer(NewsManager.getInstance(getActivity()).getApiAddress());//网上加载新闻
+		//AutoUpdateService.actionStart(getActivity());//启动自动更新数据库服务,立即执行从网上加载数据
+		view.setOnTouchListener(new OnTouchListener() {
+			private float xdown = 0;
+			private float ydown = 0;
+		    public boolean onTouch(View v, MotionEvent event) {
+		    	// ... Respond to touch events
+		    	int action = MotionEventCompat.getActionMasked(event);
+		    	switch(action) {
+		    	case (MotionEvent.ACTION_DOWN): {
+		        	//Log.e(TAG,"ACTION_DOWN");
+		        	xdown = event.getX();
+		        	ydown = event.getY();
+		            break;
+		        }
+		        case (MotionEvent.ACTION_UP): {
+		        	//Log.e(TAG,"ACTION_UP");
+		        	float xdis = event.getX() - xdown;//x左<右,y上<下
+		        	float ydis = event.getY() - ydown;
+		        	float tdis = event.getEventTime() - event.getDownTime();//时间间隔
+		        	if (Math.abs(xdis) > 15 || Math.abs(ydis) > 15) {//当做滑动
+		        		if (Math.abs(xdis) > Math.abs(ydis)) {//横向,更新新闻
+		        			changeNews(-(int)xdis);
+		        		} else {//竖向,改变情绪
+		        			changeEmotion(-(int)ydis);
+		        			//LogUtil.e("MyGestureListener", "onFling.....changeEmotion");
+		        		}
+		        	} else if (tdis < 1000 && Math.abs(xdis) < 5 && Math.abs(ydis) <5) {//当做点击
+		        		showNewsContent();
+		        	}
+		        	break;
+		        }     
+		        default: 
+		        }
+		        return true;
+		    }
+		});
 		return view;
 	}
 	
@@ -72,10 +120,16 @@ public class NewsTitleFragment extends Fragment {
 
 	public void changeEmotion(int changeType) {
 		emotionChangeType = changeType;
-		String emotion = NewsManager.getInstance(getActivity()).changeEmotion(changeType);
-		TextView homeTitle = (TextView) getActivity().findViewById(R.id.title_text);
-		homeTitle.setText("今日" + emotion + "闻");
-		queryNewsList();
+		NewsManager.getInstance(getActivity()).changeEmotion(changeType);
+		boolean exits = queryNewsList(true);
+		if (!exits) {//该情绪没有对应的新闻
+			boolean isRequested = NewsManager.getInstance(getActivity()).isCurrentEmotionRequested();
+			if (!isRequested) {//没有从服务器上查询过
+				queryFromServer(NewsManager.getInstance(getActivity()).getApiAddress());//网上加载新闻
+			} else {
+				changeEmotion(emotionChangeType);//改变情绪继续查找
+			}
+		}
 	}
 	
 	public void showNewsContent() {
@@ -88,40 +142,46 @@ public class NewsTitleFragment extends Fragment {
 	private void showNewsTitle() {
 		News news = NewsManager.getInstance(getActivity()).getCurrentNews();
 		if (news != null) {
-			titleText.setText(news.getTitle());
+			myActivity.changeEmotionTitleText();//改变情绪标题
+			titleTextView.setText(news.getTitle());
 			String imgUrl = news.getPicture();
-			if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl)) {
+			if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl) && imgUrl.contains("http")) {
 				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
 			} else {
 				//viewHolder.newsTitleText.setVisibility(View.GONE);
 				imgUrl="http://h.hiphotos.baidu.com/image/pic/item/b151f8198618367a0d517ec22c738bd4b21ce5d1.jpg";
 				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
 			}
-		}
-	}
-	
-	private void queryNewsList() {
-		List<News> newslistLoad = energyNewsDB.queryNewsByEmotionType(
-				NewsManager.getInstance(getActivity()).getCurrentEmotionType());
-		if (newslistLoad.size() > 0) {
-			NewsManager.getInstance(getActivity()).resetNewsList();
-			for (News news : newslistLoad) {
-				NewsManager.getInstance(getActivity()).addToNewsList(news);
-			}
-			showNewsTitle();
-		} else {
-			queryFromServer(NewsManager.getInstance(getActivity()).getApiAddress());
+			//LogUtil.e("showNewsTitle","URL:"+imgUrl);
 		}
 	}
 	
 	/**
-	 * 无数据加载的时候
+	 * 查询数据库中的数据,如果存在数据,则进行显示
+	 * @param saveData 是否需要保存查到的数据
 	 */
-	public void noDataSave() {
-		List<News> newslistLoad = energyNewsDB.queryNewsByEmotionType(
-				NewsManager.getInstance(getActivity()).getCurrentEmotionType());
-		if (newslistLoad.size() <= 0) {
-			changeEmotion(emotionChangeType);//用下一种情绪继续查找
+	private boolean queryNewsList(boolean saveData) {
+		boolean exists = NewsManager.getInstance(getActivity()).queryNewsList(saveData);
+		if (exists) {
+			showNewsTitle();
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 向服务器请求成功
+	 * @param newData 是否有新数据更新
+	 */
+	public void requestSuccess(boolean newData) {
+		NewsManager.getInstance(getActivity()).setCurrentEmotionRequested();//纪录当前情绪已经被查找过
+		if (newData) {
+			queryNewsList(true);//有数据更新,则重新从数据库中获取数据,并保存获得的数据
+		} else {//没有数据更新,则查询当前情绪没有没对应的数据
+			boolean exists = NewsManager.getInstance(getActivity()).queryNewsList(false);
+			if (!exists) {//没有数据
+				changeEmotion(emotionChangeType);//改变情绪继续查找
+			}
 		}
 	}
 	
@@ -137,11 +197,17 @@ public class NewsTitleFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							queryNewsList();
+							requestSuccess(true);
 						}
 					});
 				} else {
-					noDataSave();
+					// 通过runOnUiThread()方法回到主线程处理逻辑
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							requestSuccess(false);
+						}
+					});
 				}
 			}
 
@@ -160,7 +226,7 @@ public class NewsTitleFragment extends Fragment {
 	
 	private void queryFromServer(String address) {
 		if (getActivity() == null) return;
-		showProgressDialog();
+		//showProgressDialog();
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
 			public void onFinish(String response) {
@@ -170,8 +236,8 @@ public class NewsTitleFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							closeProgressDialog();
-							queryNewsList();//如果有新的数据,则刷新页面
+							//closeProgressDialog();
+							requestSuccess(true);//如果有新的数据,则刷新页面
 						}
 					});
 				} else {
@@ -179,8 +245,8 @@ public class NewsTitleFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							closeProgressDialog();
-							noDataSave();
+							//closeProgressDialog();
+							requestSuccess(false);
 							//Toast.makeText(getActivity(),"无数据加载", Toast.LENGTH_SHORT).show();
 						}
 					});
@@ -193,7 +259,7 @@ public class NewsTitleFragment extends Fragment {
 				getActivity().runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						closeProgressDialog();
+						//closeProgressDialog();
 						Toast.makeText(getActivity(),"加载失败", Toast.LENGTH_SHORT).show();
 					}
 				});
