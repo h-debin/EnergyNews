@@ -3,6 +3,7 @@ package com.energynews.app.layout;
 import com.energynews.app.R;
 import com.energynews.app.fragment.NewsTitleFragment;
 import com.energynews.app.util.ActivityCollector;
+import com.energynews.app.util.LogUtil;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.widget.Toast;
 
 public class TitleLayout extends LinearLayout implements OnClickListener {
+
+	private final static String DEBUG_TAG = "TitleLayout";
 	
 	private Button homeTitle;
 	private Button refresh;
@@ -23,6 +26,7 @@ public class TitleLayout extends LinearLayout implements OnClickListener {
 	
 	public TitleLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		LogUtil.d(DEBUG_TAG,"TitleLayout");
 		LayoutInflater.from(context).inflate(R.layout.home_title, this);
 		
 		titleText = (TextView) findViewById(R.id.title_text);
@@ -36,6 +40,7 @@ public class TitleLayout extends LinearLayout implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
+		LogUtil.d(DEBUG_TAG,"onClick");
 		switch(v.getId()) {
 		case R.id.home_button:
 			//((Activity) getContext()).finish();

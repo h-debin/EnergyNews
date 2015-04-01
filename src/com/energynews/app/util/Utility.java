@@ -13,11 +13,14 @@ import android.text.TextUtils;
 import android.util.Log;
 
 public class Utility {
+
+	private final static String DEBUG_TAG = "Utility";
 	
 	/**
 	 * 解析和处理服务器返回JSON，并将解析出的数据存储到本地。
 	 */
 	public static boolean handleEnergyNewsResponse(EnergyNewsDB energyNewsDB, String response) {
+		LogUtil.d(DEBUG_TAG,"handleEnergyNewsResponse");
 		boolean savedSuccess = false;
 		try {
 			JSONArray jsonArray = new JSONArray(response);
@@ -62,6 +65,7 @@ public class Utility {
 	 * 获得今天-2015.01.01的天数
 	 */
 	public static int getDays() {
+		LogUtil.d(DEBUG_TAG,"getDays");
 		//到1970.01.01的毫秒数
 		long saveTime = System.currentTimeMillis();
 		Calendar cal = Calendar.getInstance();

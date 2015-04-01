@@ -1,6 +1,7 @@
 package com.energynews.app.activity;
 
 import com.energynews.app.R;
+import com.energynews.app.util.LogUtil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +15,10 @@ public class NewsContentActivity extends BaseActivity {
 
 	private WebView webView;
 	
+	private final static String DEBUG_TAG = "NewsContentActivity";
+	
 	public static void actionStart(Context context, String url) {
+		LogUtil.d(DEBUG_TAG,"actionStart");
 		Intent intent = new Intent(context, NewsContentActivity.class);
 		intent.putExtra("url", url);
 		context.startActivity(intent);
@@ -22,6 +26,7 @@ public class NewsContentActivity extends BaseActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		LogUtil.d(DEBUG_TAG,"onCreate");
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.news_contant);

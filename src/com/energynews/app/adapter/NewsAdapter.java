@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.energynews.app.R;
 import com.energynews.app.model.News;
+import com.energynews.app.util.LogUtil;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import android.content.Context;
@@ -19,15 +20,18 @@ import android.widget.TextView;
 public class NewsAdapter extends ArrayAdapter<News> {
 
 	private int resourceId;
+
+	private final static String DEBUG_TAG = "NewsAdapter";
 	
-	public NewsAdapter(Context context, int textViewResourceId, 
-			List<News> objects) {
+	public NewsAdapter(Context context, int textViewResourceId, List<News> objects) {
 		super(context, textViewResourceId, objects);
+		LogUtil.d(DEBUG_TAG,"NewsAdapter");
 		resourceId = textViewResourceId;
 	}
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		LogUtil.d(DEBUG_TAG,"getView");
 		News news = getItem(position);
 		View view;
 		ViewHolder viewHolder;

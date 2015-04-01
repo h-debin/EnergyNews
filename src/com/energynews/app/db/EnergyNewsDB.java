@@ -19,6 +19,8 @@ import android.util.Log;
 
 public class EnergyNewsDB {
 	
+	private final static String DEBUG_TAG = "EnergyNewsDB";
+	
 	/**
 	 * 数据库名
 	 */
@@ -36,6 +38,7 @@ public class EnergyNewsDB {
 	 * 将构造方法私有化
 	 */
 	private EnergyNewsDB(Context context) {
+		LogUtil.d(DEBUG_TAG,"EnergyNewsDB");
 		EnergyNewsOpenHelper dbHelper = new EnergyNewsOpenHelper(context,
 				DB_NAME, null, VERSION);
 		db = dbHelper.getWritableDatabase();
@@ -53,6 +56,7 @@ public class EnergyNewsDB {
 	 * 获取EnergyNewsDB的实例。
 	 */
 	public synchronized static EnergyNewsDB getInstance(Context context) {
+		LogUtil.d(DEBUG_TAG,"EnergyNewsDB");
 		if (energyNewsDB == null) {
 			energyNewsDB = new EnergyNewsDB(context);
 		}
@@ -63,6 +67,7 @@ public class EnergyNewsDB {
 	 * 从数据库读取新闻信息。
 	 */
 	public List<News> loadAllNews() {
+		LogUtil.d(DEBUG_TAG,"loadAllNews");
 		List<News> list = new ArrayList<News>();
 		Cursor cursor = db.query("News", null, null, null, null, null, null);
 		if (cursor.moveToFirst()) {
@@ -87,6 +92,7 @@ public class EnergyNewsDB {
 	 * @return 查询到的结果数据
 	 */
 	public List<News> queryNewsByEmotionType(String emotionType) {
+		LogUtil.d(DEBUG_TAG,"queryNewsByEmotionType");
 		List<News> list = new ArrayList<News>();
 		if (TextUtils.isEmpty(emotionType)) {
 			return list;
@@ -115,6 +121,7 @@ public class EnergyNewsDB {
 	 * return 是否有新数据保存
 	 */
 	public boolean saveNews(News news) {
+		LogUtil.d(DEBUG_TAG,"saveNews");
 		if (news != null) {
 			Cursor cursor = db.rawQuery("select id from News where link = ?", new String[] {news.getLink()});
 			//Cursor cursor = db.query("News", null, null, null, null, null, null);
@@ -145,6 +152,7 @@ public class EnergyNewsDB {
 	 * iDays <iDays的纪录都删除
 	 */
 	public void deleteOldNews(int iDays) {
+		LogUtil.d(DEBUG_TAG,"deleteOldNews");
 		String delSql = "delete from News where update_time < ?";
 		db.execSQL(delSql, new String[] {String.valueOf(iDays)});
 	}

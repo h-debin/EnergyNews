@@ -15,9 +15,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 public class HttpUtil {
+
+	private final static String DEBUG_TAG = "HttpUtil";
 	
 	public static void sendResquestWithHttpClient(final String address,
 			final HttpCallbackListener listener) {
+		LogUtil.d(DEBUG_TAG,"sendResquestWithHttpClient");
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -46,6 +49,7 @@ public class HttpUtil {
 
 	public static void sendHttpRequest(final String address,
 			final HttpCallbackListener listener) {
+		LogUtil.d(DEBUG_TAG,"HttpCallbackListener");
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

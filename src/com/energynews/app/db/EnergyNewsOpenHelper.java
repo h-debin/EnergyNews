@@ -1,5 +1,7 @@
 package com.energynews.app.db;
 
+import com.energynews.app.util.LogUtil;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -7,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 public class EnergyNewsOpenHelper extends SQLiteOpenHelper {
 
+	private final static String DEBUG_TAG = "EnergyNewsOpenHelper";
+	
 	/** 
 	 * News 表创建语句
 	 */
@@ -28,10 +32,12 @@ public class EnergyNewsOpenHelper extends SQLiteOpenHelper {
 	public EnergyNewsOpenHelper(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, name, factory, version);
+		LogUtil.d(DEBUG_TAG,"EnergyNewsOpenHelper");
 	}
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		LogUtil.d(DEBUG_TAG,"onCreate");
 		// TODO Auto-generated method stub
 		db.execSQL(CREATE_NEWS);
 	}
@@ -39,6 +45,7 @@ public class EnergyNewsOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
+		LogUtil.d(DEBUG_TAG,"onUpgrade");
 
 	}
 

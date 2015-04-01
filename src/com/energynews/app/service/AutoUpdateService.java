@@ -17,13 +17,17 @@ import android.os.SystemClock;
 import android.util.Log;
 
 public class AutoUpdateService extends Service {
+
+	private final static String DEBUG_TAG = "AutoUpdateService";
 	
 	public static void actionStart(Context context) {
+		LogUtil.d(DEBUG_TAG,"actionStart");
 		Intent intent = new Intent(context, AutoUpdateService.class);
 		context.startService(intent);
 	}
 	
 	public static void actionStop(Context context) {
+		LogUtil.d(DEBUG_TAG,"actionStop");
 		Intent intent = new Intent(context, AutoUpdateService.class);
 		context.stopService(intent);
 	}
@@ -34,6 +38,7 @@ public class AutoUpdateService extends Service {
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		LogUtil.d(DEBUG_TAG,"onStartCommand");
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -52,6 +57,7 @@ public class AutoUpdateService extends Service {
 	 * 更新新闻信息。
 	 */
 	private void updateNews() {
+		LogUtil.d(DEBUG_TAG,"updateNews");
 		//删除旧新闻
 		int yestoday = Utility.getDays() - 1;
 		EnergyNewsDB.getInstance(this).deleteOldNews(yestoday);

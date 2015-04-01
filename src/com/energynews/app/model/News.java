@@ -1,6 +1,8 @@
 package com.energynews.app.model;
 
 public class News {
+
+	private final static String DEBUG_TAG = "News";
 	
 	private int id;
 	private String title;
