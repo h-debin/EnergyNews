@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#051409" >
     
     <ImageView 
         android:id="@+id/news_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:src="@drawable/apologize"
+        android:scaleType="centerCrop"
         />
     
     <TextView 
         android:id="@+id/news_title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:background="#ffffff"
-        android:alpha="0.3"
-        android:textColor="#000000"
+        android:textSize="24sp"
+        android:background="#051409"
+        android:alpha="1"
+        android:textColor="#c3dfc9"
+        android:text="不好意思,第一次启动会慢一点"
         />
 
-</FrameLayout>
+</LinearLayout>

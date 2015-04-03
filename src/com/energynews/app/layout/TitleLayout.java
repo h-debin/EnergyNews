@@ -1,58 +1,21 @@
 package com.energynews.app.layout;
 
 import com.energynews.app.R;
-import com.energynews.app.fragment.NewsTitleFragment;
-import com.energynews.app.util.ActivityCollector;
 import com.energynews.app.util.LogUtil;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.Button;
-import android.view.View.OnClickListener;
-import android.view.View;
-import android.widget.Toast;
 
-public class TitleLayout extends LinearLayout implements OnClickListener {
+public class TitleLayout extends LinearLayout {
 
 	private final static String DEBUG_TAG = "TitleLayout";
-	
-	private Button homeTitle;
-	private Button refresh;
-	private TextView titleText;
 	
 	public TitleLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LogUtil.d(DEBUG_TAG,"TitleLayout");
 		LayoutInflater.from(context).inflate(R.layout.home_title, this);
-		
-		titleText = (TextView) findViewById(R.id.title_text);
-		homeTitle = (Button) findViewById(R.id.home_button);
-		homeTitle.setOnClickListener(this);
-		homeTitle.setVisibility(View.GONE);
-		refresh = (Button) findViewById(R.id.refresh);
-		refresh.setOnClickListener(this);
-		refresh.setVisibility(View.GONE);
-	}
-	
-	@Override
-	public void onClick(View v) {
-		LogUtil.d(DEBUG_TAG,"onClick");
-		switch(v.getId()) {
-		case R.id.home_button:
-			//((Activity) getContext()).finish();
-			ActivityCollector.finishAll();
-			break;
-		case R.id.refresh:
-			NewsTitleFragment newsTitleFrag = (NewsTitleFragment) (((Activity) getContext()).
-					getFragmentManager().findFragmentById(R.id.news_title_fragment));
-			newsTitleFrag.refreshFromServer();
-			break;
-		default:
-		}
 	}
 
 }

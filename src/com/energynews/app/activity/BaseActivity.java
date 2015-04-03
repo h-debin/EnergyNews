@@ -31,6 +31,14 @@ public class BaseActivity extends Activity {
 		
 	}
 	
+	protected void onFlingEvent(float xdis, float ydis) {
+		
+	}
+	
+	protected void onScrollEvent(float xdis, float ydis) {
+		
+	}
+	
 	@Override 
     public boolean onTouchEvent(MotionEvent event){ 
         this.mDetector.onTouchEvent(event);
@@ -55,7 +63,15 @@ public class BaseActivity extends Activity {
         	//x 左>右, y 上>下
         	float xdis = event1.getX() - event2.getX();
         	float ydis = event1.getY() - event2.getY();
+        	onFlingEvent(xdis, ydis);
             return true;
+        }
+        
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                float distanceX, float distanceY) {
+        	onScrollEvent(distanceX, distanceY);
+            return false;
         }
 
         @Override//单击刷新新闻

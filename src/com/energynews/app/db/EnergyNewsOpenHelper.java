@@ -27,7 +27,8 @@ public class EnergyNewsOpenHelper extends SQLiteOpenHelper {
 			+ "ju_value integer, "
 			+ "e_value integer, "
 			+ "jing_value integer, "
-			+ "update_time integer)";
+			+ "update_time integer, "
+			+ "old_news interger default 0)";//记录该新闻是否是已经过时的新闻,默认为0,旧新闻为1
 	
 	public EnergyNewsOpenHelper(Context context, String name, CursorFactory factory,
 			int version) {

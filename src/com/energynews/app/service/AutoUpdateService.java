@@ -58,9 +58,9 @@ public class AutoUpdateService extends Service {
 	 */
 	private void updateNews() {
 		LogUtil.d(DEBUG_TAG,"updateNews");
-		//删除旧新闻
+		//设置旧新闻
 		int yestoday = Utility.getDays() - 1;
-		EnergyNewsDB.getInstance(this).deleteOldNews(yestoday);
+		EnergyNewsDB.getInstance(this).setOldNews(yestoday);
 		String address = "";
 		LogUtil.e("AutoUpdateService","updateNews()........");
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {

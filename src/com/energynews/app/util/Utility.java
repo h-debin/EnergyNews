@@ -10,7 +10,6 @@ import com.energynews.app.db.EnergyNewsDB;
 import com.energynews.app.model.News;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 public class Utility {
 

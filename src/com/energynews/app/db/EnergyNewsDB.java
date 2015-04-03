@@ -147,6 +147,13 @@ public class EnergyNewsDB {
 		return false;
 	}
 	
+	public void setOldNews(int iDays) {
+		LogUtil.d(DEBUG_TAG,"setOldNews");
+		String delSql = "update News set old_news = 1 where update_time < ? and old_news = 0";
+		db.execSQL(delSql, new String[] {String.valueOf(iDays)});
+		//删除五天前的记录
+		deleteOldNews(iDays - 5);
+	}
 	/**
 	 * 删除过期的新闻
 	 * iDays <iDays的纪录都删除
