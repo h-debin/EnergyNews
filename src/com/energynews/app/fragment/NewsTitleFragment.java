@@ -82,7 +82,7 @@ public class NewsTitleFragment extends Fragment implements AnimationListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-		LogUtil.e(DEBUG_TAG,"onCreateView");
+		LogUtil.d(DEBUG_TAG,"onCreateView");
 		// load the animation
 		animTopIn = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),R.anim.top_in);
 		animTopIn.setAnimationListener(this);
@@ -455,6 +455,7 @@ public class NewsTitleFragment extends Fragment implements AnimationListener {
 	public void onAnimationStart(Animation animation) {
 		// TODO Auto-generated method stub
 		LogUtil.d(DEBUG_TAG, "onAnimationStart......");
+		myActivity.showAds();//显示广告
 		if (animation == animRightIn) {//左滑动改变新闻
 			showNewsTitle(false);//显示新闻
 		}

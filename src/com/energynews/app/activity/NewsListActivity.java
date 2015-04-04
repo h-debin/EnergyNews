@@ -1,5 +1,9 @@
 package com.energynews.app.activity;
 
+import net.youmi.android.AdManager;
+import net.youmi.android.spot.SpotDialogListener;
+import net.youmi.android.spot.SpotManager;
+
 import com.energynews.app.R;
 import com.energynews.app.data.NewsManager;
 import com.energynews.app.fragment.NewsTitleFragment;
@@ -18,6 +22,11 @@ public class NewsListActivity extends BaseActivity {
 	private TextView homeTitleTextView;
 	
 	private NewsTitleFragment titleFragment = null;
+	
+	private static int animCount = 0;
+	private static int adCount = 0;
+	private static int adFrequency = 10;//动画启动多少次后出一条广告,当前频率+广告数
+	private static boolean bAdShow = false;//广告正在显示
 	
 	private static final int[] BACK_COLOR = {0xff051409, 0xff4F4F4F, 0xff8B1A1A, 0xff8B3A62,
 		0xff330000, 0xff333300, 0xff330033, 0xff003333, 0xff660033, 0xff660066, 0xff000066,
@@ -40,6 +49,41 @@ public class NewsListActivity extends BaseActivity {
         titleFragment = (NewsTitleFragment) getFragmentManager().
         		findFragmentById(R.id.news_title_fragment);
 		overridePendingTransition(R.anim.center_in, R.anim.center_out);
+		
+		AdManager.getInstance(this).init("fa1dbd432d37f9f2", "96b8d76780e66416", true);//测试
+		SpotManager.getInstance(this).loadSpotAds();//初始化
+		//SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_LANDSCAPE);//横屏
+		SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_PORTRAIT);//竖屏
+		SpotManager.getInstance(this).setAnimationType(SpotManager.ANIM_ADVANCE);
+	}
+	
+	public void showAds() {
+		LogUtil.d(DEBUG_TAG,"showAds");
+		//LogUtil.e(DEBUG_TAG,"showAds frequency,animCount,adCount,bAdShow");
+		//LogUtil.e(DEBUG_TAG,adFrequency+","+animCount+","+adCount+","+bAdShow);
+		animCount += 1;
+		if (animCount > adFrequency && !bAdShow) {
+			bAdShow = true;
+			SpotManager.getInstance(this).showSpotAds(this, new SpotDialogListener() {
+			    @Override
+			    public void onShowSuccess() {
+			        LogUtil.d("Youmi", "onShowSuccess");
+			    }
+			    @Override
+			    public void onShowFailed() {
+			    	LogUtil.d("Youmi", "onShowFailed");
+					bAdShow = false;
+			    }
+			    @Override
+			    public void onSpotClosed() {
+			    	LogUtil.d("sdkDemo", "closed");
+			    	bAdShow = false;
+			    }
+			});//显示广告
+			animCount = 0;
+			adCount += 1;
+			adFrequency += adCount;
+		}
 	}
 	
 	public void changeEmotionTitleText() {
@@ -62,7 +106,25 @@ public class NewsListActivity extends BaseActivity {
 	protected void onDestroy() {
 		LogUtil.d(DEBUG_TAG,"onDestroy");
 		//AutoUpdateService.actionStop(this);
+		SpotManager.getInstance(this).onDestroy();
 		super.onDestroy();
+	}
+	
+	public void onBackPressed() {
+		LogUtil.d(DEBUG_TAG,"onBackPressed");
+	    // 如果有需要，可以点击后退关闭插播广告。
+	    if (!SpotManager.getInstance(this).disMiss()) {
+	        // 弹出退出窗口，可以使用自定义退屏弹出和回退动画,参照demo,若不使用动画，传入-1
+	        super.onBackPressed();
+	    }
+	}
+
+	@Override
+	protected void onStop() {
+		LogUtil.d(DEBUG_TAG,"onStop");
+	    // 如果不调用此方法，则按home键的时候会出现图标无法显示的情况。
+	    SpotManager.getInstance(this).onStop();
+	    super.onStop();
 	}
 	
 	/**
