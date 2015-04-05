@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ActivityCollector {
 
-	private final static String DEBUG_TAG = "AutoUpdateReceiver";
+	private final static String DEBUG_TAG = "ActivityCollector";
 	
 	public static List<Activity> activities = new ArrayList<Activity>();
 	
@@ -23,6 +23,8 @@ public class ActivityCollector {
 	
 	public static void finishAll() {
 		LogUtil.d(DEBUG_TAG,"finishAll");
+		//LogUtil.e(DEBUG_TAG,"finishAll"+activities.size());
+		int cout = 0;
 		for (Activity activity : activities) {
 			if (!activity.isFinishing()) {
 				activity.finish();

@@ -3,7 +3,6 @@ package com.energynews.app.activity;
 import com.energynews.app.R;
 import com.energynews.app.util.LogUtil;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,16 +48,6 @@ public class NewsContentActivity extends BaseActivity {
 		String url = intent.getStringExtra("url");
 		webView.loadUrl(url);
 		overridePendingTransition(R.anim.center_in, R.anim.center_out);
-	}
-	
-	@Override
-	protected void singleTapConfirmed() {
-		finish();
-	}
-	
-	@Override
-	protected void onFlingEvent(float xdis, float ydis) {
-		finish();
 	}
 	
 }

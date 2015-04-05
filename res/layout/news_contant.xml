@@ -4,12 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <com.energynews.app.layout.ContentTitleLayout 
-        android:id="@+id/content_title_layout"
+    
+    <TextView 
+        android:id="@+id/content_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-    </com.energynews.app.layout.ContentTitleLayout>
+        android:gravity="center"
+        android:text="新闻内容"
+        android:textSize="28sp"
+        android:textColor="#c3dfc9"
+        />
     
     <WebView 
         android:id="@+id/new_content_web_view"
@@ -17,6 +21,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         />
-    
+
 
 </LinearLayout>
