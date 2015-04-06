@@ -4,8 +4,6 @@ import com.energynews.app.model.News;
 import com.energynews.app.util.LogUtil;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,7 +12,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import android.util.Log;
 
 
 public class EnergyNewsDB {
@@ -64,29 +61,6 @@ public class EnergyNewsDB {
 	}
 	
 	/**
-	 * 从数据库读取新闻信息。
-	 */
-	public List<News> loadAllNews() {
-		LogUtil.d(DEBUG_TAG,"loadAllNews");
-		List<News> list = new ArrayList<News>();
-		Cursor cursor = db.query("News", null, null, null, null, null, null);
-		if (cursor.moveToFirst()) {
-			do {
-				News news = new News();
-				news.setId(cursor.getInt(cursor.getColumnIndex("id")));
-				news.setTitle(cursor.getString(cursor
-						.getColumnIndex("title")));
-				news.setLink(cursor.getString(cursor
-						.getColumnIndex("link")));
-				news.setPicture(cursor.getString(cursor
-						.getColumnIndex("picture")));
-				list.add(news);
-			} while (cursor.moveToNext());
-		}
-		return list;
-	}
-	
-	/**
 	 * 根据情绪类型查询数据库
 	 * @param emotionType
 	 * @return 查询到的结果数据
@@ -97,19 +71,23 @@ public class EnergyNewsDB {
 		if (TextUtils.isEmpty(emotionType)) {
 			return list;
 		}
-		Cursor cursor = db.rawQuery("select * from News where emotion_type = ? ORDER BY ? DESC", 
-				new String[] {emotionType, (String)(emotionMap.get(emotionType))});
+		Cursor cursor = db.rawQuery("select * from News where emotion_type = ? and picture like 'http%' ORDER BY ? DESC", 
+				new String[] {emotionType, "update_time"});
 		//LogUtil.e("queryNewsByEmotionType", emotionType + "," + (String)(emotionMap.get(emotionType)));
 		if (cursor.moveToFirst()) {
 			do {
 				News news = new News();
 				news.setId(cursor.getInt(cursor.getColumnIndex("id")));
-				news.setTitle(cursor.getString(cursor
-						.getColumnIndex("title")));
-				news.setLink(cursor.getString(cursor
-						.getColumnIndex("link")));
-				news.setPicture(cursor.getString(cursor
-						.getColumnIndex("picture")));
+				news.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+				news.setLink(cursor.getString(cursor.getColumnIndex("link")));
+				news.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+				news.setLeValue(cursor.getInt(cursor.getColumnIndex("le_value")));
+				news.setHaoValue(cursor.getInt(cursor.getColumnIndex("hao_value")));
+				news.setNuValue(cursor.getInt(cursor.getColumnIndex("nu_value")));
+				news.setAiValue(cursor.getInt(cursor.getColumnIndex("ai_value")));
+				news.setJuValue(cursor.getInt(cursor.getColumnIndex("ju_value")));
+				news.setEValue(cursor.getInt(cursor.getColumnIndex("e_value")));
+				news.setJingValue(cursor.getInt(cursor.getColumnIndex("jing_value")));
 				list.add(news);
 			} while (cursor.moveToNext());
 		}

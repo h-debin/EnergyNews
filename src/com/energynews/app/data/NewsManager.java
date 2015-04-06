@@ -16,8 +16,6 @@ public class NewsManager {
 	
 	public static final String API_ADRESS_PRE = "http://api.minghe.me/api/v1/news?emotion_type=";
 	public static final String[] EMOTION_TYPE = {"好","乐","怒","哀","惧","恶","惊"};
-	public static final String[] EMOTION_TEXT = {"完美世界","一笑倾城","令人发指","哀鸿满路",
-		"毛骨悚然","罄竹难书","春雷乍动"};
 	//标题栏的背景颜色,深色
 	private static final int[] EMOTION_HOME_COLOR = {0xff1e6c0a, 0xffc40e39, 0xff974013, 
 		0xff0c313d, 0xff2b2638, 0xff4e4b0a, 0xff091f6a};
@@ -104,9 +102,6 @@ public class NewsManager {
 	public int getCurrentEmotionColorText() {
 		LogUtil.d(DEBUG_TAG,"getCurrentEmotionColorText");
 		return EMOTION_TEXT_COLOR[currentEmotionTypeId];
-	}
-	public String getCurrentText() {
-		return EMOTION_TEXT[currentEmotionTypeId];
 	}
 	private void setNewsId(int newsId) {
 		LogUtil.d(DEBUG_TAG,"setCurrentNewsId");

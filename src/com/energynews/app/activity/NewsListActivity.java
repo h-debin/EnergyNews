@@ -38,7 +38,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	
 	private ProgressDialog progressDialog;
 	
-	private TextView homeTitleTextView;
+	private TextView homeTextView;
 	private TextView titleTextView;
 	private ImageView titleImage;
 	private EnergyNewsDB energyNewsDB;
@@ -76,9 +76,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.news_list_relative);
-        homeTitleTextView = (TextView) findViewById(R.id.home_title_text);
-        TextPaint tp0 = homeTitleTextView.getPaint();
-        tp0.setFakeBoldText(true); 
 
      // load the animation
      	animTopIn = AnimationUtils.loadAnimation(this,R.anim.top_in);
@@ -98,9 +95,10 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
      	animLeftOut = AnimationUtils.loadAnimation(this,R.anim.left_out);
      	animLeftOut.setAnimationListener(this);
      		
+     	homeTextView = (TextView) findViewById(R.id.home_title_text);
      	titleTextView = (TextView) findViewById(R.id.news_title_text);
-     	TextPaint tp = titleTextView.getPaint();
-        tp.setFakeBoldText(true); 
+     	//TextPaint tp = titleTextView.getPaint();
+        //tp.setFakeBoldText(true); 
     	titleImage = (ImageView) findViewById(R.id.news_image);
     	titleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
     	energyNewsDB = EnergyNewsDB.getInstance(this);
@@ -194,7 +192,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 			news = NewsManager.getInstance(this).getCurrentNews();
 		}
 		if (news != null) {
-			changeEmotionTitleText();//改变情绪标题
+			homeTextView.setText(news.getEmotion());
 			titleTextView.setText(news.getTitle());
 			String imgUrl = news.getPicture();
 			if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl) && imgUrl.contains("http")) {
@@ -438,14 +436,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 			animCount = 0;
 			adCount += 1;
 			adFrequency += adCount;
-		}
-	}
-	
-	public void changeEmotionTitleText() {
-		LogUtil.d(DEBUG_TAG,"changeEmotionTitleText");
-		if (homeTitleTextView != null) {
-			String emotion = NewsManager.getInstance(this).getCurrentText();
-			homeTitleTextView.setText(emotion);
 		}
 	}
 	

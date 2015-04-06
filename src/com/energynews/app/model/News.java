@@ -1,5 +1,8 @@
 package com.energynews.app.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class News {
 
 	private final static String DEBUG_TAG = "News";
@@ -18,6 +21,15 @@ public class News {
 	private int jingValue;
 	private int updateTime;
 	
+	private List<ValueToText> valueList = new ArrayList<ValueToText>();
+	
+	public String getEmotion() {
+		String temp = "情绪指数";
+		for (ValueToText item : valueList) {
+			temp += item.txt;
+		}
+		return temp;
+	}
 	public int getId() {
 		return id;
 	}
@@ -75,27 +87,73 @@ public class News {
 	}
 	public void setLeValue(int leValue) {
 		this.leValue = leValue;
+		if (leValue != 0) {
+			String txt = "\n乐:" + Integer.toString(leValue);
+			addList(leValue, txt);
+		}
 	}
 	public void setHaoValue(int haoValue) {
 		this.haoValue = haoValue;
+		if (haoValue != 0) {
+			String txt = "\n好:" + Integer.toString(haoValue);
+			addList(haoValue, txt);
+		}
 	}
 	public void setNuValue(int nuValue) {
 		this.nuValue = nuValue;
+		if (nuValue != 0) {
+			String txt = "\n怒:" + Integer.toString(nuValue);
+			addList(nuValue, txt);
+		}
 	}
 	public void setAiValue(int aiValue) {
 		this.aiValue = aiValue;
+		if (aiValue != 0) {
+			String txt = "\n哀:" + Integer.toString(aiValue);
+			addList(aiValue, txt);
+		}
 	}
 	public void setJuValue(int juValue) {
 		this.juValue = juValue;
+		if (juValue != 0) {
+			String txt = "\n惧:" + Integer.toString(juValue);
+			addList(juValue, txt);
+		}
 	}
 	public void setEValue(int eValue) {
 		this.eValue = eValue;
+		if (eValue != 0) {
+			String txt = "\n恶:" + Integer.toString(eValue);
+			addList(eValue, txt);
+		}
 	}
 	public void setJingValue(int jingValue) {
 		this.jingValue = jingValue;
+		if (jingValue != 0) {
+			String txt = "\n惊:" + Integer.toString(jingValue);
+			addList(jingValue, txt);
+		}
 	}
 	public void setUpdateTime(int updateTime) {
 		this.updateTime = updateTime;
+	}
+	private void addList(int vl, String tx) {
+		ValueToText item = new ValueToText(vl, tx);
+		for (int i = 0; i < valueList.size(); i++) {
+			if (valueList.get(i).value < vl) {
+				valueList.add(i, item);
+				return;
+			}
+		}
+		valueList.add(item);
+	}
+	private class ValueToText {
+		public ValueToText(int vl, String tx) {
+			value = vl;
+			txt = tx;
+		}
+		int value;
+		String txt;
 	}
 
 }

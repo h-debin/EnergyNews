@@ -17,11 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:alpha="1"
         android:textColor="#ffffff"
         android:text="不好意思,第一次启动会慢一点"
-        android:layout_marginLeft="12sp"
+        android:layout_marginLeft="140sp"
         android:layout_marginRight="12sp"
         />
     
@@ -32,9 +32,10 @@
         android:layout_gravity="center"
         android:layout_alignParentTop="true"
         android:alpha="1"
-        android:gravity="center"
-        android:text="完美世界"
-        android:textSize="28sp"
+        android:gravity="left"
+        android:text="情绪指数"
+        android:textSize="16sp"
+        android:layout_marginLeft="12sp"
         android:textColor="#ffffff"
         />
 
