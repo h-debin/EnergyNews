@@ -4,11 +4,9 @@ import com.energynews.app.util.ActivityCollector;
 import com.energynews.app.util.LogUtil;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
-import android.view.MotionEvent;
-import android.view.GestureDetector.SimpleOnGestureListener;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class BaseActivity extends Activity {
 
@@ -27,6 +25,18 @@ public class BaseActivity extends Activity {
 		LogUtil.d(DEBUG_TAG,"onDestroy");
 		super.onDestroy();
 		ActivityCollector.removeActivity(this);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 }

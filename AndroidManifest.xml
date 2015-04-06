@@ -53,6 +53,8 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        <meta-data android:value="55227334fd98c5bf38000a0e" android:name="UMENG_CHANNEL"></meta-data>
+        <meta-data android:value="Umeng" android:name="UMENG_CHANNEL"/>
     </application>
 
 </manifest>

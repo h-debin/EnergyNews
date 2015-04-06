@@ -112,6 +112,7 @@ public class NewsManager {
 		LogUtil.d(DEBUG_TAG,"setCurrentNewsId");
 		lastNewsId = currentNewsId;
 		currentNewsId = newsId;
+		rememberEmotionLeaveId();
 		//LogUtil.e(DEBUG_TAG,"setCurrentNewsId:last,crt:"+lastNewsId+","+currentNewsId);
 	}
 	public News getCurrentNews() {

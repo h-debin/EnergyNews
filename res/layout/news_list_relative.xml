@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#051409" >
     
     <ImageView 
         android:id="@+id/news_image"
@@ -17,10 +18,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:textSize="24sp"
-        android:background="#051409"
-        android:alpha="0.3"
-        android:textColor="#c3dfc9"
+        android:alpha="1"
+        android:textColor="#ffffff"
         android:text="不好意思,第一次启动会慢一点"
+        android:layout_marginLeft="12sp"
+        android:layout_marginRight="12sp"
         />
     
     <TextView 
@@ -29,11 +31,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_alignParentTop="true"
-        android:alpha="0.3"
+        android:alpha="1"
         android:gravity="center"
         android:text="完美世界"
         android:textSize="28sp"
-        android:textColor="#c3dfc9"
+        android:textColor="#ffffff"
         />
 
 </RelativeLayout>

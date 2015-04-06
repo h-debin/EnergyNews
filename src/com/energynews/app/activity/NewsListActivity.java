@@ -8,17 +8,16 @@ import com.energynews.app.R;
 import com.energynews.app.data.NewsManager;
 import com.energynews.app.db.EnergyNewsDB;
 import com.energynews.app.model.News;
-import com.energynews.app.util.ActivityCollector;
 import com.energynews.app.util.HttpCallbackListener;
 import com.energynews.app.util.HttpUtil;
 import com.energynews.app.util.LogUtil;
 import com.energynews.app.util.Utility;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,6 +35,8 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	private final static String DEBUG_TAG = "NewsListActivity";
 
 	private GestureDetectorCompat mDetector;
+	
+	private ProgressDialog progressDialog;
 	
 	private TextView homeTitleTextView;
 	private TextView titleTextView;
@@ -69,17 +70,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	private static int adFrequency = 1000;//动画启动多少次后出一条广告,当前频率+广告数
 	private static boolean bAdShow = false;//广告正在显示
 	
-	private static final int[] BACK_COLOR = {0xff051409, 0xff4F4F4F, 0xff8B1A1A, 0xff8B3A62,
-		0xff330000, 0xff333300, 0xff330033, 0xff003333, 0xff660033, 0xff660066, 0xff000066,
-		0xff336699};
-	private static int colorId = 0;
-	
-	public static void actionStart(Context context) {
-		LogUtil.d(DEBUG_TAG,"actionStart");
-		Intent intent = new Intent(context, NewsListActivity.class);
-		context.startActivity(intent);
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		LogUtil.d(DEBUG_TAG,"onCreate");
@@ -87,35 +77,39 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.news_list_relative);
         homeTitleTextView = (TextView) findViewById(R.id.home_title_text);
+        TextPaint tp0 = homeTitleTextView.getPaint();
+        tp0.setFakeBoldText(true); 
 
      // load the animation
-     		animTopIn = AnimationUtils.loadAnimation(this,R.anim.top_in);
-     		animTopIn.setAnimationListener(this);
-     		animTopOut = AnimationUtils.loadAnimation(this,R.anim.top_out);
-     		animTopOut.setAnimationListener(this);
-     		animRightIn = AnimationUtils.loadAnimation(this,R.anim.right_in);
-     		animRightIn.setAnimationListener(this);
-     		animRightOut = AnimationUtils.loadAnimation(this,R.anim.right_out);
-     		animRightOut.setAnimationListener(this);
-     		animBottomIn = AnimationUtils.loadAnimation(this,R.anim.bottom_in);
-     		animBottomIn.setAnimationListener(this);
-     		animBottomOut = AnimationUtils.loadAnimation(this,R.anim.bottom_out);
-     		animBottomOut.setAnimationListener(this);
-     		animLeftIn = AnimationUtils.loadAnimation(this,R.anim.left_in);
-     		animLeftIn.setAnimationListener(this);
-     		animLeftOut = AnimationUtils.loadAnimation(this,R.anim.left_out);
-     		animLeftOut.setAnimationListener(this);
+     	animTopIn = AnimationUtils.loadAnimation(this,R.anim.top_in);
+     	animTopIn.setAnimationListener(this);
+     	animTopOut = AnimationUtils.loadAnimation(this,R.anim.top_out);
+     	animTopOut.setAnimationListener(this);
+     	animRightIn = AnimationUtils.loadAnimation(this,R.anim.right_in);
+     	animRightIn.setAnimationListener(this);
+     	animRightOut = AnimationUtils.loadAnimation(this,R.anim.right_out);
+     	animRightOut.setAnimationListener(this);
+     	animBottomIn = AnimationUtils.loadAnimation(this,R.anim.bottom_in);
+     	animBottomIn.setAnimationListener(this);
+     	animBottomOut = AnimationUtils.loadAnimation(this,R.anim.bottom_out);
+     	animBottomOut.setAnimationListener(this);
+     	animLeftIn = AnimationUtils.loadAnimation(this,R.anim.left_in);
+     	animLeftIn.setAnimationListener(this);
+     	animLeftOut = AnimationUtils.loadAnimation(this,R.anim.left_out);
+     	animLeftOut.setAnimationListener(this);
      		
-     		titleTextView = (TextView) findViewById(R.id.news_title_text);
-    		titleImage = (ImageView) findViewById(R.id.news_image);
-    		//titleImage.setScaleType(ImageScaleType.BOTTOM_CROP);
-    		energyNewsDB = EnergyNewsDB.getInstance(this);
-    		int yestoday = Utility.getDays() - 1;
-    		energyNewsDB.setOldNews(yestoday);//设置一天之前的新闻为旧新闻
-    		queryNewsList(true, false);//加载新闻列表
-    		queryFromServer(NewsManager.getInstance(this).getApiAddress());//网上加载新闻
+     	titleTextView = (TextView) findViewById(R.id.news_title_text);
+     	TextPaint tp = titleTextView.getPaint();
+        tp.setFakeBoldText(true); 
+    	titleImage = (ImageView) findViewById(R.id.news_image);
+    	titleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    	energyNewsDB = EnergyNewsDB.getInstance(this);
+    	int yestoday = Utility.getDays() - 1;
+    	energyNewsDB.setOldNews(yestoday);//设置一天之前的新闻为旧新闻
+    	queryNewsList(true, false);//加载新闻列表
+    	queryFromServer(NewsManager.getInstance(this).getApiAddress());//网上加载新闻
 
-    		mDetector = new GestureDetectorCompat(this, new MyGestureListener(this));
+    	mDetector = new GestureDetectorCompat(this, new MyGestureListener());
     		
 		AdManager.getInstance(this).init("fa1dbd432d37f9f2", "96b8d76780e66416", true);//测试
 		SpotManager.getInstance(this).loadSpotAds();//初始化
@@ -124,7 +118,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 		SpotManager.getInstance(this).setAnimationType(SpotManager.ANIM_ADVANCE);
 		
 		bAdShow = false;
-		setTitleColor();
 		
 	}
 	
@@ -184,8 +177,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 		LogUtil.d(DEBUG_TAG,"showNewsContent");
 		News news = NewsManager.getInstance(this).getCurrentNews();
 		if (news != null) {
-			int color = ((NewsListActivity)this).getBackColor();
-			NewsContentActivity.actionStart(this, news.getLink(), color);
+			NewsContentActivity.actionStart(this, news.getLink());
 		}
 	}
 	
@@ -205,14 +197,9 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 			changeEmotionTitleText();//改变情绪标题
 			titleTextView.setText(news.getTitle());
 			String imgUrl = news.getPicture();
-			if ("null".equals(imgUrl) || TextUtils.isEmpty(imgUrl) || !imgUrl.contains("http")) {
-				titleImage.setImageResource(R.drawable.loading);
-				//imgUrl="http://h.hiphotos.baidu.com/image/pic/item/b151f8198618367a0d517ec22c738bd4b21ce5d1.jpg";
-			} else {
-				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl, R.drawable.loading);
+			if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl) && imgUrl.contains("http")) {
+				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
 			}
-		} else {
-			titleImage.setImageResource(R.drawable.loading);
 		}
 	}
 	
@@ -269,13 +256,8 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 		}
 	}
 	
-	public void changeBackgroundColor(int color) {
-		titleTextView.setBackgroundColor(color);
-	}
-	
 	public void refreshFromServer() {
 		LogUtil.d(DEBUG_TAG,"refreshFromServer");
-		if (this == null) return;
 		String address = NewsManager.getInstance(this).getApiAddress();
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
@@ -315,7 +297,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	
 	private void queryFromServer(String address) {
 		LogUtil.d(DEBUG_TAG,"queryFromServer");
-		if (this == null) return;
 		//showProgressDialog();
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
@@ -502,50 +483,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	    super.onStop();
 	}
 	
-	/**
-	 * 单击标题栏,更新当前新闻
-	 */
-	protected void singleTapConfirmed() {
-		LogUtil.d(DEBUG_TAG,"singleTapConfirmed");
-		showNewsContent();
-	}
-	
-	/**
-	 * 滑动事件
-	 */
-	protected void onFlingEvent(float xdis, float ydis) {
-		LogUtil.d(DEBUG_TAG,"onFlingEvent");
-		int idOrien = (int)(xdis/Math.abs(xdis));//移动方向+-1
-		colorId = (colorId + idOrien + BACK_COLOR.length) % BACK_COLOR.length;
-		setTitleColor();
-	}
-	
-	private void setTitleColor() {
-		int color = BACK_COLOR[colorId];
-		homeTitleTextView.setBackgroundColor(color);
-		changeBackgroundColor(color);
-	}
-	
-	/**
-	 * 滑动事件过程
-	 */
-	protected void onScrollEvent(MotionEvent e1, MotionEvent e2) {
-		LogUtil.d(DEBUG_TAG,"onFlingEvent");
-		float xdis = e2.getX() - e1.getX();
-		float ydis = e2.getY() - e1.getY();
-		if (Math.abs(xdis) > 15 ||Math.abs(ydis) > 15) {
-			if (Math.abs(xdis) > Math.abs(ydis)) {
-				changeNews(-(int)xdis);
-			} else {
-				changeEmotion(-(int)ydis);
-			}
-		}
-	}
-	
-	public int getBackColor() {
-		return BACK_COLOR[colorId];
-	}
-	
 	@Override 
     public boolean onTouchEvent(MotionEvent event){ 
 		LogUtil.d(DEBUG_TAG,"onTouchEvent");
@@ -554,12 +491,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
     }
 	
 	class MyGestureListener extends SimpleOnGestureListener {
-        private static final String TAG = "MyGestureListener";
-        private Context myContext;
-        
-        public MyGestureListener(Context context) {
-        	myContext = context;
-        }
         @Override
         public boolean onDown(MotionEvent event) {
             return true;
@@ -570,31 +501,45 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
                 float velocityX, float velocityY) {
     		LogUtil.d(DEBUG_TAG,"onFling");
         	//x 左>右, y 上>下
-        	onScrollEvent(event1, event2);
+    		float xdis = event2.getX() - event1.getX();
+    		float ydis = event2.getY() - event1.getY();
+    		if (Math.abs(xdis) > 15 ||Math.abs(ydis) > 15) {
+    			if (Math.abs(xdis) > Math.abs(ydis)) {
+    				changeNews(-(int)xdis);
+    			} else {
+    				changeEmotion(-(int)ydis);
+    			}
+    		}
             return true;
-        }
-        
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                float distanceX, float distanceY) {
-    		LogUtil.d(DEBUG_TAG,"onScroll");
-        	//onScrollEvent(e1, e2);
-            return false;
         }
 
         @Override//单击刷新新闻
         public boolean onSingleTapConfirmed(MotionEvent event) {
     		LogUtil.d(DEBUG_TAG,"onSingleTapConfirmed");
-        	singleTapConfirmed();
-            return true;
-        }
-        
-        @Override//双击关闭程序
-        public boolean onDoubleTapEvent(MotionEvent event) {
-    		LogUtil.d(DEBUG_TAG,"onDoubleTapEvent");
-        	ActivityCollector.finishAll();
+    		showNewsContent();
             return true;
         }
     }
+	
+	/**
+	 * 显示进度对话框
+	 */
+	private void showProgressDialog() {
+		if (progressDialog == null) {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setMessage("正在加载...");
+			progressDialog.setCanceledOnTouchOutside(false);
+		}
+		progressDialog.show();
+	}
+	
+	/**
+	 * 关闭进度对话框
+	 */
+	private void closeProgressDialog() {
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
+	}
 	
 }

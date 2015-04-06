@@ -58,8 +58,8 @@ public class HttpUtil {
 					URL url = new URL(address);
 					connection = (HttpURLConnection) url.openConnection();
 					connection.setRequestMethod("GET");
-					connection.setConnectTimeout(4*1000);//ms
-					connection.setReadTimeout(4*1000);
+					connection.setConnectTimeout(8*1000);//ms
+					connection.setReadTimeout(8*1000);
 					InputStream in = connection.getInputStream();
 					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 					StringBuilder response = new StringBuilder();
