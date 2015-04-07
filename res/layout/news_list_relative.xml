@@ -23,6 +23,7 @@
         android:text="不好意思,第一次启动会慢一点"
         android:layout_marginLeft="140sp"
         android:layout_marginRight="12sp"
+        android:layout_marginBottom="70sp"
         />
     
     <TextView 
@@ -38,5 +39,15 @@
         android:layout_marginLeft="12sp"
         android:textColor="#ffffff"
         />
+    
+    <LinearLayout
+        android:id="@+id/youmi_ad"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center_horizontal"
+    	android:orientation="vertical"
+        android:alpha="1"
+        android:layout_alignParentBottom="true" >
+    </LinearLayout>
 
 </RelativeLayout>

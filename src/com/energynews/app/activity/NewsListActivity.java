@@ -1,7 +1,8 @@
 package com.energynews.app.activity;
 
 import net.youmi.android.AdManager;
-import net.youmi.android.spot.SpotDialogListener;
+import net.youmi.android.banner.AdSize;
+import net.youmi.android.banner.AdView;
 import net.youmi.android.spot.SpotManager;
 
 import com.energynews.app.R;
@@ -14,7 +15,6 @@ import com.energynews.app.util.LogUtil;
 import com.energynews.app.util.Utility;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.text.TextUtils;
@@ -26,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +35,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	private final static String DEBUG_TAG = "NewsListActivity";
 
 	private GestureDetectorCompat mDetector;
-	
-	private ProgressDialog progressDialog;
 	
 	private TextView homeTextView;
 	private TextView titleTextView;
@@ -64,10 +63,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	
 	private int emotionChangeType = 1;
 	
-	private static int animCount = 0;
-	private static int adCount = 0;
-	private static int adFrequency = 100;//动画启动多少次后出一条广告,当前频率+广告数
-	private static boolean bAdShow = false;//广告正在显示
+	private boolean firstNews = false;//是否已经显示了第一个新闻
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +71,8 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.news_list_relative);
+		
+		firstNews = false;
 
      // load the animation
      	animTopIn = AnimationUtils.loadAnimation(this,R.anim.top_in);
@@ -99,7 +97,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
      	//TextPaint tp = titleTextView.getPaint();
         //tp.setFakeBoldText(true); 
     	titleImage = (ImageView) findViewById(R.id.news_image);
-    	titleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    	//titleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
     	energyNewsDB = EnergyNewsDB.getInstance(this);
     	int yestoday = Utility.getDays() - 1;
     	energyNewsDB.setOldNews(yestoday);//设置一天之前的新闻为旧新闻
@@ -108,13 +106,17 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 
     	mDetector = new GestureDetectorCompat(this, new MyGestureListener());
     		
-		AdManager.getInstance(this).init("fa1dbd432d37f9f2", "96b8d76780e66416", true);//测试
+		AdManager.getInstance(this).init("fa1dbd432d37f9f2", "96b8d76780e66416", false);//测试
 		SpotManager.getInstance(this).loadSpotAds();//初始化
 		//SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_LANDSCAPE);//横屏
 		SpotManager.getInstance(this).setSpotOrientation(SpotManager.ORIENTATION_PORTRAIT);//竖屏
 		SpotManager.getInstance(this).setAnimationType(SpotManager.ANIM_ADVANCE);
-		
-		bAdShow = false;
+		// 实例化广告条
+		AdView adView = new AdView(this, AdSize.FIT_SCREEN);
+		// 获取要嵌入广告条的布局
+		LinearLayout adLayout=(LinearLayout)findViewById(R.id.youmi_ad);
+		// 将广告条加入到布局中
+		adLayout.addView(adView);
 		
 	}
 	
@@ -201,6 +203,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 			if (!"null".equals(imgUrl) && !TextUtils.isEmpty(imgUrl) && imgUrl.contains("http")) {
 				UrlImageViewHelper.setUrlDrawable(titleImage, imgUrl);
 			}
+			firstNews = true;
 		}
 	}
 	
@@ -373,7 +376,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	public void onAnimationStart(Animation animation) {
 		// TODO Auto-generated method stub
 		LogUtil.d(DEBUG_TAG, "onAnimationStart......");
-		showAds();//显示广告
 		if (animation == animRightIn) {//左滑动改变新闻
 			showNewsTitle(false);//显示新闻
 		}
@@ -410,35 +412,6 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 		}
 		if (animation == animBottomOut) {//右滑动改变新闻
 			outting =BOTTOM_OUTTING;
-		}
-	}
-	
-	public void showAds() {
-		LogUtil.d(DEBUG_TAG,"showAds");
-		//LogUtil.e(DEBUG_TAG,"showAds frequency,animCount,adCount,bAdShow");
-		//LogUtil.e(DEBUG_TAG,adFrequency+","+animCount+","+adCount+","+bAdShow);
-		animCount += 1;
-		if (animCount > adFrequency && !bAdShow) {
-			bAdShow = true;
-			SpotManager.getInstance(this).showSpotAds(this, new SpotDialogListener() {
-			    @Override
-			    public void onShowSuccess() {
-			        LogUtil.d("Youmi", "onShowSuccess");
-			    }
-			    @Override
-			    public void onShowFailed() {
-			    	LogUtil.d("Youmi", "onShowFailed");
-					bAdShow = false;
-			    }
-			    @Override
-			    public void onSpotClosed() {
-			    	LogUtil.d("sdkDemo", "closed");
-			    	bAdShow = false;
-			    }
-			});//显示广告
-			animCount = 0;
-			adCount += 1;
-			adFrequency += adCount;
 		}
 	}
 	
@@ -493,6 +466,9 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
         public boolean onFling(MotionEvent event1, MotionEvent event2, 
                 float velocityX, float velocityY) {
     		LogUtil.d(DEBUG_TAG,"onFling");
+    		if (!firstNews) {
+    			return true;
+    		}
         	//x 左>右, y 上>下
     		float xdis = event2.getX() - event1.getX();
     		float ydis = event2.getY() - event1.getY();
@@ -509,30 +485,12 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
         @Override//单击刷新新闻
         public boolean onSingleTapConfirmed(MotionEvent event) {
     		LogUtil.d(DEBUG_TAG,"onSingleTapConfirmed");
+    		if (!firstNews) {
+    			return true;
+    		}
     		showNewsContent();
             return true;
         }
     }
-	
-	/**
-	 * 显示进度对话框
-	 */
-	private void showProgressDialog() {
-		if (progressDialog == null) {
-			progressDialog = new ProgressDialog(this);
-			progressDialog.setMessage("正在加载...");
-			progressDialog.setCanceledOnTouchOutside(false);
-		}
-		progressDialog.show();
-	}
-	
-	/**
-	 * 关闭进度对话框
-	 */
-	private void closeProgressDialog() {
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-		}
-	}
 	
 }

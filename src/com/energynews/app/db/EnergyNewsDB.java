@@ -65,13 +65,14 @@ public class EnergyNewsDB {
 	 * @param emotionType
 	 * @return 查询到的结果数据
 	 */
-	public List<News> queryNewsByEmotionType(String emotionType) {
+	public synchronized List<News> queryNewsByEmotionType(String emotionType) {
 		LogUtil.d(DEBUG_TAG,"queryNewsByEmotionType");
 		List<News> list = new ArrayList<News>();
 		if (TextUtils.isEmpty(emotionType)) {
 			return list;
 		}
-		Cursor cursor = db.rawQuery("select * from News where emotion_type = ? and picture like 'http%' ORDER BY ? DESC", 
+		Cursor cursor = db.rawQuery("select * from News where emotion_type = ? "
+				+ "and picture like 'http%' and old_news = 0 ORDER BY ? DESC", 
 				new String[] {emotionType, "update_time"});
 		//LogUtil.e("queryNewsByEmotionType", emotionType + "," + (String)(emotionMap.get(emotionType)));
 		if (cursor.moveToFirst()) {
@@ -98,7 +99,7 @@ public class EnergyNewsDB {
 	 * 将News实例存储到数据库。
 	 * return 是否有新数据保存
 	 */
-	public boolean saveNews(News news) {
+	public synchronized boolean saveNews(News news) {
 		LogUtil.d(DEBUG_TAG,"saveNews");
 		if (news != null) {
 			Cursor cursor = db.rawQuery("select id from News where link = ?", new String[] {news.getLink()});
@@ -125,7 +126,7 @@ public class EnergyNewsDB {
 		return false;
 	}
 	
-	public void setOldNews(int iDays) {
+	public synchronized void setOldNews(int iDays) {
 		LogUtil.d(DEBUG_TAG,"setOldNews");
 		String delSql = "update News set old_news = 1 where update_time < ? and old_news = 0";
 		db.execSQL(delSql, new String[] {String.valueOf(iDays)});
@@ -136,7 +137,7 @@ public class EnergyNewsDB {
 	 * 删除过期的新闻
 	 * iDays <iDays的纪录都删除
 	 */
-	public void deleteOldNews(int iDays) {
+	public synchronized void deleteOldNews(int iDays) {
 		LogUtil.d(DEBUG_TAG,"deleteOldNews");
 		String delSql = "delete from News where update_time < ?";
 		db.execSQL(delSql, new String[] {String.valueOf(iDays)});
