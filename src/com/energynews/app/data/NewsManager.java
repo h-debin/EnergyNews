@@ -16,17 +16,10 @@ public class NewsManager {
 	
 	public static final String API_ADRESS_PRE = "http://api.minghe.me/api/v1/news?emotion_type=";
 	public static final String[] EMOTION_TYPE = {"好","乐","怒","哀","惧","恶","惊"};
-	//标题栏的背景颜色,深色
-	private static final int[] EMOTION_HOME_COLOR = {0xff1e6c0a, 0xffc40e39, 0xff974013, 
-		0xff0c313d, 0xff2b2638, 0xff4e4b0a, 0xff091f6a};
-	//背景色,浅色
-	private static final int[] EMOTION_NEWS_COLOR = {0xffa9df9c, 0xffdd6a85, 0xffc4967e,
-		0xff70869b, 0xffafacb5, 0xffa3a067, 0xff4e65b7};
-	//标题栏的字体颜色
-	private static final int[] EMOTION_TEXT_COLOR = {0xff030702, 0xff3d0613, 0xff32190c,
-		0xffccd7db, 0xffbcaaee, 0xff181706, 0xff060a1a};
 	//纪录上一次离开该情绪时的索引
 	private static final int[] EMOTION_LEAVE_ID = {-1, -1, -1, -1, -1, -1, -1};
+	//纪录该情绪已浏览的新闻数量,如果浏览结束,则从服务器上再进行刷新浏览
+	private static final int[] EMOTION_SCAN_COUNT = {0, 0, 0, 0, 0, 0, 0};
 	
 	private static boolean[] isEmotionRequested = {false,false,false,false,false,false,false};
 	
@@ -91,18 +84,6 @@ public class NewsManager {
 		LogUtil.d(DEBUG_TAG,"getCurrentEmotionType");
 		return EMOTION_TYPE[currentEmotionTypeId];
 	}
-	public int getCurrentEmotionColor() {
-		LogUtil.d(DEBUG_TAG,"getCurrentEmotionColor");
-		return EMOTION_HOME_COLOR[currentEmotionTypeId];
-	}
-	public int getCurrentEmotionColorBg() {
-		LogUtil.d(DEBUG_TAG,"getCurrentEmotionColorBg");
-		return EMOTION_NEWS_COLOR[currentEmotionTypeId];
-	}
-	public int getCurrentEmotionColorText() {
-		LogUtil.d(DEBUG_TAG,"getCurrentEmotionColorText");
-		return EMOTION_TEXT_COLOR[currentEmotionTypeId];
-	}
 	private void setNewsId(int newsId) {
 		LogUtil.d(DEBUG_TAG,"setCurrentNewsId");
 		lastNewsId = currentNewsId;
@@ -164,10 +145,20 @@ public class NewsManager {
 		int len = newsList.size();
 		if (changeType >= 0) {
 			setNewsId((1 + currentNewsId) % len);
+			EMOTION_SCAN_COUNT[currentEmotionTypeId] += 1;
 		} else {
 			setNewsId((currentNewsId - 1 + len) % len);
+			EMOTION_SCAN_COUNT[currentEmotionTypeId] -= 1;
 		}
 		return getCurrentNews();
+	}
+	
+	public boolean checkRefresh() {
+		int scan = Math.abs(EMOTION_SCAN_COUNT[currentEmotionTypeId]);
+		return scan > 0 && (scan >= newsList.size());
+	}
+	public void resetScanCount() {
+		EMOTION_SCAN_COUNT[currentEmotionTypeId] = 0;
 	}
 
 	/**

@@ -17,7 +17,6 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,7 +66,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	
 	private static int animCount = 0;
 	private static int adCount = 0;
-	private static int adFrequency = 1000;//动画启动多少次后出一条广告,当前频率+广告数
+	private static int adFrequency = 100;//动画启动多少次后出一条广告,当前频率+广告数
 	private static boolean bAdShow = false;//广告正在显示
 	
 	@Override
@@ -128,6 +127,10 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 			titleImage.startAnimation(animLeftOut);
 		} else {
 			titleImage.startAnimation(animRightOut);
+		}
+		if (NewsManager.getInstance(this).checkRefresh()) {
+			refreshFromServer();//刷新
+			NewsManager.getInstance(this).resetScanCount();//重新初始化浏览总数
 		}
 		//LogUtil.d("ss", "changeNews id:" + android.os.Process.myTid());
 	}
@@ -243,19 +246,19 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
 	 */
 	public void requestSuccess(boolean newData) {
 		LogUtil.d(DEBUG_TAG,"requestSuccess");
-		NewsManager.getInstance(this).setCurrentEmotionRequested();//纪录当前情绪已经被查找过
-		if (newData) {
-			queryNewsList(true, true);//有数据更新,则重新从数据库中获取数据,并保存获得的数据
-		} else {//没有数据更新,则查询当前情绪没有没对应的数据
-			boolean exists = NewsManager.getInstance(this).queryNewsList(false, false);
-			if (!exists) {//没有数据
-				changeEmotion(emotionChangeType);//改变情绪继续查找
+		boolean exists = NewsManager.getInstance(this).queryNewsList(false, false);
+		if (exists) {
+			NewsManager.getInstance(this).setCurrentEmotionRequested();//纪录当前情绪已经被查找过
+			if (newData) {
+				queryNewsList(true, true);//有数据更新,则重新从数据库中获取数据,并保存获得的数据
 			}
+		} else {
+			changeEmotion(emotionChangeType);//改变情绪继续查找
 		}
 	}
 	
 	public void refreshFromServer() {
-		LogUtil.d(DEBUG_TAG,"refreshFromServer");
+		LogUtil.e(DEBUG_TAG,"refreshFromServer");
 		String address = NewsManager.getInstance(this).getApiAddress();
 		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
 			@Override
