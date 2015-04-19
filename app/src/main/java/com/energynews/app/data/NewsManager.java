@@ -28,6 +28,7 @@ public class NewsManager {
 	private int lastNewsId = -1;//上一个新闻在newsList中的索引
 
 	private static List<News> newsList = new ArrayList<News>();
+    private static List<News> newsListHead = new ArrayList<News>();
 	
 	private static NewsManager mNewsManager = null;
 	private static EnergyNewsDB db = null;
@@ -40,6 +41,9 @@ public class NewsManager {
 		setCurrentEmotionTypeId(0);
 		setNewsId(-1);
 		db = EnergyNewsDB.getInstance(context);
+        for (int i = 0; i < EMOTION_TYPE.length; i++) {
+            newsListHead.add(new News());
+        }
 	}
 	
 	/**
@@ -52,7 +56,11 @@ public class NewsManager {
 		}
 		return mNewsManager;
 	}
-	
+
+    public static List<News> getNewsListHead() {
+        LogUtil.d(DEBUG_TAG,"getNewsListHead");
+        return newsListHead;
+    }
 	public static List<News> getNewsList() {
 		LogUtil.d(DEBUG_TAG,"getNewsList");
 		return newsList;
@@ -76,7 +84,7 @@ public class NewsManager {
 	public void rememberEmotionLeaveId() {
 		EMOTION_LEAVE_ID[currentEmotionTypeId] = currentNewsId;
 	}
-	private int getCurrentEmotionTypeId() {
+    public int getCurrentEmotionTypeId() {
 		LogUtil.d(DEBUG_TAG,"getCurrentEmotionTypeId");
 		return currentEmotionTypeId;
 	}
@@ -84,6 +92,12 @@ public class NewsManager {
 		LogUtil.d(DEBUG_TAG,"getCurrentEmotionType");
 		return EMOTION_TYPE[currentEmotionTypeId];
 	}
+    public synchronized void setNewsListHead() {
+        if (currentNewsId >= 0) {
+            News news = newsList.get(currentNewsId);
+            newsListHead.set(currentEmotionTypeId, news);
+        }
+    }
 	public void setNewsId(int newsId) {
 		LogUtil.d(DEBUG_TAG,"setCurrentNewsId");
 		lastNewsId = currentNewsId;

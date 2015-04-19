@@ -25,8 +25,11 @@ public class News {
 	
 	public String getEmotion() {
 		String temp = "情绪指数";
+        int count = 0;
 		for (ValueToText item : valueList) {
 			temp += item.txt;
+            count += 1;
+            if (count >= 3) break;
 		}
 		return temp;
 	}

@@ -9,11 +9,14 @@ import android.os.Message;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.text.method.MovementMethod;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +47,9 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
         context.startActivity(intent);
     }
 
+    private final static String NEWSLIST = "NEWSLIST";
+    private final static String NEWSHEAD = "NEWSHEAD";
+    private static String NEWS_SHOW_TYPE = NEWSHEAD;
     private ViewPager mPager;
     private ImagePagerAdapter mAdapter;
     private static List<News> newsList = new ArrayList<News>();
@@ -54,6 +60,10 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
 
     private int emotionChangeType = 1;
     private static int errorcount = 0;
+    float xScreenCenter, yScreenCenter;
+    int yodis = 0;
+    boolean yorien = false;//记录是y方向移动
+    boolean yorienconfirm = false;//记录已经确认是y方向移动
 
     @SuppressWarnings("deprecation")
     @Override
@@ -62,6 +72,11 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_image_pager);
+
+        WindowManager wm = this.getWindowManager();
+
+        xScreenCenter = wm.getDefaultDisplay().getWidth() / 2;
+        yScreenCenter = wm.getDefaultDisplay().getHeight() / 2;
 
         mAdapter = new ImagePagerAdapter(getFragmentManager());
 
@@ -77,7 +92,16 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
 
             @Override
             public void onPageSelected(int position) {
-                LogUtil.e(DEBUG_TAG, "mPager onPageSelected position = " + position);
+                //LogUtil.e(DEBUG_TAG, "mPager onPageSelected position = " + position);
+                if (yorien) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            changeEmotion(-yodis);
+                        }
+                    }).start();
+                }
+                yorien = false;
             }
 
             @Override
@@ -116,7 +140,30 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
                 int cpos = mPager.getCurrentItem();
                 positionOffset = cpos % newsList.size() - newsManager.getCurrentNewsId();
                 mAdapter.notifyDataSetChanged();
-                mPager.setCurrentItem(cpos);
+                //mPager.setCurrentItem(cpos);
+                NEWS_SHOW_TYPE = NEWSLIST;
+            }
+        });
+    }
+
+    private synchronized void showHorizonPager() {
+        if (NEWS_SHOW_TYPE == NEWSLIST) return;
+        updateViewPager();
+    }
+    private synchronized void showVerticalPager() {
+        if (NEWS_SHOW_TYPE == NEWSHEAD) return;
+        if (newsList.size() > 0) {
+            newsManager.setNewsListHead();//改变当前newsListHead
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                newsList = newsManager.getNewsListHead();
+                int cpos = mPager.getCurrentItem();
+                positionOffset = cpos % newsList.size() - newsManager.getCurrentEmotionTypeId();
+                mAdapter.notifyDataSetChanged();
+                //mPager.setCurrentItem(cpos);
+                NEWS_SHOW_TYPE = NEWSHEAD;
             }
         });
     }
@@ -210,15 +257,15 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
 
     private void showNewsContent() {
         LogUtil.d(DEBUG_TAG,"showNewsContent");
-        if (newsList.size() > 0) {
-            News news = newsList.get(calNewsIdx(mPager.getCurrentItem()));
-            NewsContentActivity.actionStart(this, news.getLink());
+        synchronized(newsList) {
+            if (newsList.size() > 0) {
+                News news = newsList.get(calNewsIdx(mPager.getCurrentItem()));
+                NewsContentActivity.actionStart(this, news.getLink());
+            }
         }
     }
 
     float xdown, ydown, xpre, ypre;
-    int yodis;
-    boolean yorien = true;
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         // TODO Auto-generated method stub
@@ -230,59 +277,55 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
             xpre = xdown;
             ypre = ydown;
             yorien = true;
-            yodis = 0;
-            //mPager.setPageTransformer(true, new CubeOutTransformer());//左右翻动
+            yorienconfirm = false;
+            if (newsList.size() > 0) {
+                newsManager.setNewsId(calNewsIdx(mPager.getCurrentItem()));//记录浏览到的位置
+            }
+            mPager.setPageTransformer(true, new FlipVerticalTransformer());//上下翻动
+            showVerticalPager();//刷新显示
+
         } else if (action == MotionEvent.ACTION_UP){
-            float xdis = event.getX() - xdown;
+            //float xdis = event.getX() - xdown;
             float ydis = event.getY() - ydown;
+            yodis = ydis > 0 ? 1 : -1;
             //LogUtil.e(DEBUG_TAG, "action up ydis = " + ydis + " yorien = " + yorien);
-            if (yorien && Math.abs(ydis) > 50) {
-                mPager.setPageTransformer(true, new FlipVerticalTransformer());//上下翻动
-                if (newsList.size() > 0) {
-                    newsManager.setNewsId(calNewsIdx(mPager.getCurrentItem()));//记录浏览到的位置
-                }
-                //newsList = new ArrayList<News>();
-                //mAdapter.notifyDataSetChanged();
-                mPager.setCurrentItem(mPager.getCurrentItem() - yodis);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        changeEmotion(yodis);
-                    }
-                }).start();
-            } else if (yorien && Math.abs(ydis) < 5) {
+            if (yorien && Math.abs(ydis) < 5) {
                 showNewsContent();//显示新闻
             }
         } else if (action == MotionEvent.ACTION_MOVE) {
-            if (yorien) {
+            if (yorien && !yorienconfirm) {//没有确定时y方向移动
                 float xmdis = event.getX() - xpre;
                 float ymdis = event.getY() - ypre;
                 if (Math.abs(xmdis) > Math.abs(ymdis)) {
-                    if (Math.abs(xmdis) > 1) {
+                    if (Math.abs(xmdis) > 1 || Math.abs(xmdis) > 3 * Math.abs(ymdis)) {
                         yorien = false;
-                    }
-                } else if (Math.abs(ymdis) > 0.001) {
-                    if (yodis == 0) {
-                        yodis = ymdis > 0 ? 1 : -1;
-                    } else {
-                        yorien = (((float)yodis * ymdis) > 0);//相同方向
                     }
                 }
                 xpre = event.getX();
                 ypre = event.getY();
                 //变为横向 yorien = false, 重新设置viewpager
                 if (!yorien) {
-
+                    mPager.setPageTransformer(true, new CubeOutTransformer());//左右翻动
+                    showHorizonPager();//刷新显示情绪列表
+                } else if (Math.abs(event.getY() - ydown) * 4 > yScreenCenter) {//确定是y方向移动,移动了1/4个屏幕
+                    yorienconfirm = true;
                 }
             }
         }
+        float xnew, ynew;
         if (yorien) {
-            event.setLocation(event.getY(), event.getX());
-            mPager.setPageTransformer(true, new FlipVerticalTransformer());//上下翻动
+            if (action == MotionEvent.ACTION_DOWN) {
+                xnew = xScreenCenter;
+                ynew = yScreenCenter;
+            } else {
+                xnew = xScreenCenter + 2 * (event.getY() - ydown);
+                ynew = yScreenCenter + 2 * (event.getX() - xdown);
+            }
         } else {
-            event.setLocation(ydown + event.getX() - xdown, xdown + event.getY() - ydown);
-            mPager.setPageTransformer(true, new CubeOutTransformer());//左右翻动
+            xnew = yScreenCenter + 2 * (event.getX() - xdown);
+            ynew = xScreenCenter + 2 * (event.getY() - ydown);
         }
+        event.setLocation(xnew, ynew);
         return super.dispatchTouchEvent(event);
     }
 
@@ -294,8 +337,12 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             final int position = getArguments().getInt(EXTRA_POSITION);
             int itempositon = -1;
-            if (newsList.size() > 0) {
-                itempositon = calNewsIdx(position);
+            News news = null;
+            synchronized(newsList) {
+                if (newsList.size() > 0) {
+                    itempositon = calNewsIdx(position);
+                    news = newsList.get(itempositon);
+                }
             }
             //LogUtil.e("PlaceholderFragment", "onCreateView position = " + position);
 
@@ -305,13 +352,18 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
             TextView emotion = (TextView) rootView.findViewById(R.id.home_title_text);
             TextView newstitle = (TextView) rootView.findViewById(R.id.news_title_text);
             if (itempositon >= 0) {
-                News news = newsList.get(itempositon);
-                UrlImageViewHelper.setUrlDrawable(imageView, news.getPicture(), R.drawable.loading1);
+                if (TextUtils.isEmpty(news.getPicture())) {
+                    imageView.setImageResource(R.drawable.apologize);
+                    emotion.setVisibility(View.GONE);
+                    newstitle.setVisibility(View.GONE);
+                } else {
+                    UrlImageViewHelper.setUrlDrawable(imageView, news.getPicture(), R.drawable.loading1);
+                    emotion.setText(news.getEmotion());
+                    newstitle.setText(news.getTitle());
+                    emotion.setVisibility(View.VISIBLE);
+                    newstitle.setVisibility(View.VISIBLE);
+                }
 
-                emotion.setText(news.getEmotion());
-                newstitle.setText(news.getTitle());
-                emotion.setVisibility(View.VISIBLE);
-                newstitle.setVisibility(View.VISIBLE);
             } else {
                 imageView.setImageResource(R.drawable.loading1);
                 emotion.setVisibility(View.GONE);

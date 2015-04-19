@@ -14,29 +14,32 @@
     
     <TextView 
         android:id="@+id/news_title_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:textSize="20sp"
-        android:alpha="1"
+        android:alpha="0.3"
+        android:background="#051409"
         android:textColor="#ffffff"
         android:text="不好意思,第一次启动会慢一点"
         android:layout_marginLeft="140sp"
         android:layout_marginRight="12sp"
-        android:layout_marginBottom="70sp"
+        android:layout_marginBottom="20sp"
         />
     
     <TextView 
         android:id="@+id/home_title_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_alignParentTop="true"
-        android:alpha="1"
+        android:alpha="0.3"
+        android:background="#051409"
         android:gravity="left"
         android:text="情绪指数"
         android:textSize="16sp"
-        android:layout_marginLeft="12sp"
+        android:layout_marginLeft="15sp"
+        android:layout_marginTop="15sp"
         android:textColor="#ffffff"
         />
     
