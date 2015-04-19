@@ -1921,15 +1921,12 @@ com.energynews.app.activity.NewsContentActivity:
     private static final java.lang.String DEBUG_TAG
 com.energynews.app.activity.NewsListActivity:
     private static final java.lang.String DEBUG_TAG
-    private android.app.ProgressDialog progressDialog
     private static final int NEED_TOP_IN
     private static final int NEED_BOTTOM_IN
     private static final int TOP_OUTTING
     private static final int BOTTOM_OUTTING
     private static final int LEFT_OUTTING
     private static final int RIGHT_OUTTING
-    521:527:private void showProgressDialog()
-    533:536:private void closeProgressDialog()
 com.energynews.app.data.NewsManager:
     private static final java.lang.String DEBUG_TAG
     public static final java.lang.String API_ADRESS_PRE

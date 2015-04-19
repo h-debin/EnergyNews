@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#051409" >
+    
+    <ImageView 
+        android:id="@+id/news_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/apologize"
+        android:scaleType="centerCrop"
+        />
+    
+    <TextView 
+        android:id="@+id/news_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textSize="20sp"
+        android:alpha="1"
+        android:textColor="#ffffff"
+        android:text="不好意思,第一次启动会慢一点"
+        android:layout_marginLeft="140sp"
+        android:layout_marginRight="12sp"
+        android:layout_marginBottom="70sp"
+        />
+    
+    <TextView 
+        android:id="@+id/home_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:alpha="1"
+        android:gravity="left"
+        android:text="情绪指数"
+        android:textSize="16sp"
+        android:layout_marginLeft="12sp"
+        android:textColor="#ffffff"
+        />
+    
+    <LinearLayout
+        android:id="@+id/youmi_ad"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center_horizontal"
+    	android:orientation="vertical"
+        android:alpha="1"
+        android:layout_alignParentBottom="true" >
+    </LinearLayout>
+
+</RelativeLayout>
+<!-- From: file:/home/aoshi/workspace/EnergyNews/app/src/main/res/layout/news_list_relative.xml -->

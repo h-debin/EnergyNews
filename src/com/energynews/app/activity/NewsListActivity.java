@@ -97,7 +97,7 @@ public class NewsListActivity extends BaseActivity implements AnimationListener 
      	//TextPaint tp = titleTextView.getPaint();
         //tp.setFakeBoldText(true); 
     	titleImage = (ImageView) findViewById(R.id.news_image);
-    	//titleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    	titleImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
     	energyNewsDB = EnergyNewsDB.getInstance(this);
     	int yestoday = Utility.getDays() - 1;
     	energyNewsDB.setOldNews(yestoday);//设置一天之前的新闻为旧新闻

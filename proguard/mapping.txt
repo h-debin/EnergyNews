@@ -1844,16 +1844,13 @@ com.energynews.app.activity.NewsListActivity -> com.energynews.app.activity.News
     int needAnimIn -> o
     int outting -> p
     int emotionChangeType -> q
-    int animCount -> r
-    int adCount -> s
-    int adFrequency -> t
-    boolean bAdShow -> u
+    boolean firstNews -> r
     void onCreate(android.os.Bundle) -> onCreate
     void changeNews(int) -> a
     void changeEmotion(int) -> b
     void showNewsContent() -> a
-    void showNewsTitle(boolean) -> c
-    void setAnimType() -> d
+    void showNewsTitle(boolean) -> b
+    void setAnimType() -> c
     boolean queryNewsList(boolean,boolean) -> a
     void requestSuccess(boolean) -> a
     void refreshFromServer() -> b
@@ -1861,14 +1858,13 @@ com.energynews.app.activity.NewsListActivity -> com.energynews.app.activity.News
     void onAnimationEnd(android.view.animation.Animation) -> onAnimationEnd
     void onAnimationRepeat(android.view.animation.Animation) -> onAnimationRepeat
     void onAnimationStart(android.view.animation.Animation) -> onAnimationStart
-    void showAds() -> c
     void onRestart() -> onRestart
     void onDestroy() -> onDestroy
     void onBackPressed() -> onBackPressed
     void onStop() -> onStop
     boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
-    com.energynews.app.db.EnergyNewsDB access$0(com.energynews.app.activity.NewsListActivity) -> a
-    void access$1(boolean) -> b
+    boolean access$0(com.energynews.app.activity.NewsListActivity) -> a
+    com.energynews.app.db.EnergyNewsDB access$1(com.energynews.app.activity.NewsListActivity) -> b
 com.energynews.app.activity.NewsListActivity$1 -> com.energynews.app.activity.c:
     com.energynews.app.activity.NewsListActivity this$0 -> a
     void onFinish(java.lang.String) -> a
@@ -1897,12 +1893,7 @@ com.energynews.app.activity.NewsListActivity$2$2 -> com.energynews.app.activity.
 com.energynews.app.activity.NewsListActivity$2$3 -> com.energynews.app.activity.j:
     com.energynews.app.activity.NewsListActivity$2 this$1 -> a
     void run() -> run
-com.energynews.app.activity.NewsListActivity$3 -> com.energynews.app.activity.k:
-    com.energynews.app.activity.NewsListActivity this$0 -> a
-    void onShowSuccess() -> onShowSuccess
-    void onShowFailed() -> onShowFailed
-    void onSpotClosed() -> onSpotClosed
-com.energynews.app.activity.NewsListActivity$MyGestureListener -> com.energynews.app.activity.l:
+com.energynews.app.activity.NewsListActivity$MyGestureListener -> com.energynews.app.activity.k:
     com.energynews.app.activity.NewsListActivity this$0 -> a
     boolean onDown(android.view.MotionEvent) -> onDown
     boolean onFling(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onFling

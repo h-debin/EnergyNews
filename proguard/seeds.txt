@@ -122,6 +122,7 @@ com.energynews.app.R$id: int home_title_text
 com.energynews.app.R$id: int new_content_web_view
 com.energynews.app.R$id: int news_image
 com.energynews.app.R$id: int news_title_text
+com.energynews.app.R$id: int youmi_ad
 com.energynews.app.R$layout: int news_contant
 com.energynews.app.R$layout: int news_list_relative
 com.energynews.app.R$menu: int main
