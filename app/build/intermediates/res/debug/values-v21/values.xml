@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.1.0/res/values-v21/values.xml -->
+    <eat-comment/>
+    <style name="CPB" parent="android:Widget.Material.ProgressBar">
+    </style>
+</resources>

@@ -13,6 +13,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+
 public class NewsContentActivity extends BaseActivity {
 
 	
@@ -25,7 +27,7 @@ public class NewsContentActivity extends BaseActivity {
 		context.startActivity(intent);
 	}
 
-    private static ProgressBar spinner;
+    private CircularProgressBar circularProgressBar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class NewsContentActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.news_contant);
 
-        spinner = (ProgressBar) findViewById(R.id.loading);
+        circularProgressBar = (CircularProgressBar) findViewById(R.id.circular_progressbar);
 		WebView webView = (WebView) findViewById(R.id.new_content_web_view);
 		webView.getSettings().setJavaScriptEnabled(true);		
 		webView.setWebViewClient(new WebViewClient() {
@@ -71,7 +73,7 @@ public class NewsContentActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                spinner.setVisibility(View.VISIBLE);
+                circularProgressBar.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -79,7 +81,7 @@ public class NewsContentActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                spinner.setVisibility(View.GONE);
+                circularProgressBar.setVisibility(View.GONE);
             }
         });
     }

@@ -7,12 +7,6 @@
 # view AndroidManifest.xml #generated:39
 -keep class com.energynews.app.activity.NewsContentActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:41
--keep class net.youmi.android.AdBrowser { <init>(...); }
-
-# view AndroidManifest.xml #generated:50
--keep class net.youmi.android.AdReceiver { <init>(...); }
-
-# view AndroidManifest.xml #generated:47
--keep class net.youmi.android.AdService { <init>(...); }
+# view res/layout/news_contant.xml #generated:7
+-keep class fr.castorflex.android.circularprogressbar.CircularProgressBar { <init>(...); }
 

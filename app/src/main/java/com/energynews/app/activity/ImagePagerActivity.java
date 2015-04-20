@@ -129,7 +129,7 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
     }
 
     protected void onSaveInstanceState(Bundle outState) {
-        if (newsList.size() > 0) {
+        if (newsList.size() > 0 && NEWS_SHOW_TYPE == NEWSLIST) {
             newsManager.setNewsId(calNewsIdx(mPager.getCurrentItem()));//记录浏览到的位置
         }
     }
@@ -144,6 +144,7 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
                 mAdapter.notifyDataSetChanged();
                 //mPager.setCurrentItem(cpos);
                 NEWS_SHOW_TYPE = NEWSLIST;
+                //LogUtil.e(DEBUG_TAG, "updateViewPager current newsid = "+newsManager.getCurrentNewsId());
             }
         });
     }
@@ -261,7 +262,7 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
     }
 
     private void showNewsContent() {
-        LogUtil.d(DEBUG_TAG,"showNewsContent");
+        LogUtil.d(DEBUG_TAG,"showNewsContent current newsid = "+newsManager.getCurrentNewsId());
         synchronized(newsList) {
             if (newsList.size() > 0) {
                 News news = newsList.get(calNewsIdx(mPager.getCurrentItem()));
@@ -285,7 +286,7 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
             ypre = ydown;
             yorien = true;
             yorienconfirm = false;
-            if (newsList.size() > 0) {
+            if (newsList.size() > 0 && NEWS_SHOW_TYPE == NEWSLIST) {
                 newsManager.setNewsId(calNewsIdx(mPager.getCurrentItem()));//记录浏览到的位置
             }
 

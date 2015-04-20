@@ -1,13 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <integer-array name="mycolors">
+        <item>@color/holo_blue_dark</item>
+        <item>@color/holo_yellow_dark</item>
+        <item>@color/holo_green_dark</item>
+        <item>@color/holo_purple_dark</item>
+        <item>@color/holo_red_dark</item>
+    </integer-array>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.1.0/res/values/values.xml -->
+    <eat-comment/>
+    <color name="cpb_default_color">#33b5e5</color>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="gplus_color_1">#3e802f</color>
+    <color name="gplus_color_2">#f4b400</color>
+    <color name="gplus_color_3">#427fed</color>
+    <color name="gplus_color_4">#b23424</color>
+    <color name="holo_blue_dark">#0099cc</color>
+    <color name="holo_green_dark">#669900</color>
+    <color name="holo_purple_dark">#9933cc</color>
+    <color name="holo_red_dark">#cc0000</color>
+    <color name="holo_yellow_dark">#ff8800</color>
+    <color name="pocket_color_1">#85edb9</color>
+    <color name="pocket_color_2">#34bdb7</color>
+    <color name="pocket_color_3">#ee4458</color>
+    <color name="pocket_color_4">#fcb74d</color>
+    <declare-styleable name="CircularProgressBar"><attr format="reference" name="cpbStyle"/><attr format="color" name="cpb_color"/><attr format="reference" name="cpb_colors"/><attr format="dimension" name="cpb_stroke_width"/><attr format="integer" name="cpb_min_sweep_angle"/><attr format="integer" name="cpb_max_sweep_angle"/><attr format="float" name="cpb_sweep_speed"/><attr format="float" name="cpb_rotation_speed"/></declare-styleable>
     <!-- From: file:/home/aoshi/workspace/EnergyNews/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.1.0/res/values/values.xml -->
+    <eat-comment/>
+    <dimen name="cpb_default_stroke_width">4dp</dimen>
+    <integer name="cpb_default_max_sweep_angle">300</integer>
+    <integer name="cpb_default_min_sweep_angle">20</integer>
     <!-- From: file:/home/aoshi/workspace/EnergyNews/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Settings</string>
     <string name="app_name">心闻</string>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.1.0/res/values/values.xml -->
+    <eat-comment/>
+    <item format="float" name="cpb_default_rotation_speed" type="string">1</item>
+    <item format="float" name="cpb_default_sweep_speed" type="string">1</item>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_image_pager">ImagePagerActivity</string>
@@ -22,5 +61,20 @@
     </style>
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <!-- From: file:/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.1.0/res/values/values.xml -->
+    <eat-comment/>
+    <style name="CPB" parent="android:Widget.Holo.ProgressBar">
+    </style>
+    <style name="CircularProgressBar" parent="CPB">
+        <item name="cpb_color">@color/cpb_default_color</item>
+        <item name="cpb_stroke_width">@dimen/cpb_default_stroke_width</item>
+        <item name="cpb_min_sweep_angle">@integer/cpb_default_min_sweep_angle</item>
+        <item name="cpb_max_sweep_angle">@integer/cpb_default_max_sweep_angle</item>
+        <item name="cpb_sweep_speed">@string/cpb_default_sweep_speed</item>
+        <item name="cpb_rotation_speed">@string/cpb_default_rotation_speed</item>
+    </style>
+    <style name="Theme.SmoothProgressBarDefaults" parent="android:Theme.Holo">
+        <item name="cpbStyle">@style/CircularProgressBar</item>
     </style>
 </resources>

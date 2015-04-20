@@ -1750,14 +1750,18 @@ com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer
 com.ToxicBakery.viewpager.transforms.ZoomOutTranformer
 com.energynews.app.BuildConfig
 com.energynews.app.R
+com.energynews.app.R$array
 com.energynews.app.R$attr
+com.energynews.app.R$color
 com.energynews.app.R$dimen
 com.energynews.app.R$drawable
 com.energynews.app.R$id
+com.energynews.app.R$integer
 com.energynews.app.R$layout
 com.energynews.app.R$menu
 com.energynews.app.R$string
 com.energynews.app.R$style
+com.energynews.app.R$styleable
 com.energynews.app.activity.BaseActivity:
     private static final java.lang.String DEBUG_TAG
 com.energynews.app.activity.ImagePagerActivity:
@@ -1772,11 +1776,11 @@ com.energynews.app.activity.NewsContentActivity:
 com.energynews.app.data.NewsManager:
     private static final java.lang.String DEBUG_TAG
     public static final java.lang.String API_ADRESS_PRE
-    141:148:public com.energynews.app.model.News getCurrentNews()
-    152:156:public com.energynews.app.model.News getLastNews()
-    190:199:public com.energynews.app.model.News changeNews(int)
-    203:204:public boolean checkRefresh()
-    207:208:public void resetScanCount()
+    136:143:public com.energynews.app.model.News getCurrentNews()
+    147:151:public com.energynews.app.model.News getLastNews()
+    185:194:public com.energynews.app.model.News changeNews(int)
+    198:199:public boolean checkRefresh()
+    202:203:public void resetScanCount()
 com.energynews.app.db.EnergyNewsDB:
     private static final java.lang.String DEBUG_TAG
     public static final java.lang.String DB_NAME
@@ -1861,113 +1865,6 @@ com.koushikdutta.urlimageviewhelper.UrlImageViewHelper:
     710:711:public static void setRequestPropertiesCallback(com.koushikdutta.urlimageviewhelper.UrlImageViewHelper$RequestPropertiesCallback)
     727:737:public static android.graphics.Bitmap remove(java.lang.String)
     809:809:public static int getPendingDownloads()
-com.nostra13.universalimageloader.cache.disc.DiscCacheAware
-com.nostra13.universalimageloader.cache.disc.DiskCache
-com.nostra13.universalimageloader.cache.disc.impl.BaseDiscCache
-com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiscCache
-com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache
-com.nostra13.universalimageloader.cache.disc.impl.ext.DiskLruCache
-com.nostra13.universalimageloader.cache.disc.impl.ext.DiskLruCache$1
-com.nostra13.universalimageloader.cache.disc.impl.ext.DiskLruCache$2
-com.nostra13.universalimageloader.cache.disc.impl.ext.DiskLruCache$Editor
-com.nostra13.universalimageloader.cache.disc.impl.ext.DiskLruCache$Editor$FaultHidingOutputStream
-com.nostra13.universalimageloader.cache.disc.impl.ext.DiskLruCache$Entry
-com.nostra13.universalimageloader.cache.disc.impl.ext.DiskLruCache$Snapshot
-com.nostra13.universalimageloader.cache.disc.impl.ext.LruDiscCache
-com.nostra13.universalimageloader.cache.disc.impl.ext.StrictLineReader
-com.nostra13.universalimageloader.cache.disc.impl.ext.StrictLineReader$1
-com.nostra13.universalimageloader.cache.disc.impl.ext.Util
-com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator
-com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
-com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator
-com.nostra13.universalimageloader.cache.memory.BaseMemoryCache
-com.nostra13.universalimageloader.cache.memory.LimitedMemoryCache
-com.nostra13.universalimageloader.cache.memory.MemoryCache
-com.nostra13.universalimageloader.cache.memory.MemoryCacheAware
-com.nostra13.universalimageloader.cache.memory.impl.FIFOLimitedMemoryCache
-com.nostra13.universalimageloader.cache.memory.impl.FuzzyKeyMemoryCache
-com.nostra13.universalimageloader.cache.memory.impl.LRULimitedMemoryCache
-com.nostra13.universalimageloader.cache.memory.impl.LargestLimitedMemoryCache
-com.nostra13.universalimageloader.cache.memory.impl.LimitedAgeMemoryCache
-com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache
-com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache
-com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache
-com.nostra13.universalimageloader.core.DefaultConfigurationFactory
-com.nostra13.universalimageloader.core.DefaultConfigurationFactory$DefaultThreadFactory
-com.nostra13.universalimageloader.core.DisplayBitmapTask
-com.nostra13.universalimageloader.core.DisplayImageOptions
-com.nostra13.universalimageloader.core.DisplayImageOptions$1
-com.nostra13.universalimageloader.core.DisplayImageOptions$Builder
-com.nostra13.universalimageloader.core.ImageLoader
-com.nostra13.universalimageloader.core.ImageLoader$1
-com.nostra13.universalimageloader.core.ImageLoader$SyncImageLoadingListener
-com.nostra13.universalimageloader.core.ImageLoaderConfiguration
-com.nostra13.universalimageloader.core.ImageLoaderConfiguration$1
-com.nostra13.universalimageloader.core.ImageLoaderConfiguration$Builder
-com.nostra13.universalimageloader.core.ImageLoaderConfiguration$NetworkDeniedImageDownloader
-com.nostra13.universalimageloader.core.ImageLoaderConfiguration$SlowNetworkImageDownloader
-com.nostra13.universalimageloader.core.ImageLoaderEngine
-com.nostra13.universalimageloader.core.ImageLoaderEngine$1
-com.nostra13.universalimageloader.core.ImageLoadingInfo
-com.nostra13.universalimageloader.core.LoadAndDisplayImageTask
-com.nostra13.universalimageloader.core.LoadAndDisplayImageTask$1
-com.nostra13.universalimageloader.core.LoadAndDisplayImageTask$2
-com.nostra13.universalimageloader.core.LoadAndDisplayImageTask$3
-com.nostra13.universalimageloader.core.LoadAndDisplayImageTask$TaskCancelledException
-com.nostra13.universalimageloader.core.ProcessAndDisplayImageTask
-com.nostra13.universalimageloader.core.assist.ContentLengthInputStream
-com.nostra13.universalimageloader.core.assist.FailReason
-com.nostra13.universalimageloader.core.assist.FailReason$FailType
-com.nostra13.universalimageloader.core.assist.FlushedInputStream
-com.nostra13.universalimageloader.core.assist.ImageScaleType
-com.nostra13.universalimageloader.core.assist.ImageSize
-com.nostra13.universalimageloader.core.assist.LoadedFrom
-com.nostra13.universalimageloader.core.assist.QueueProcessingType
-com.nostra13.universalimageloader.core.assist.ViewScaleType
-com.nostra13.universalimageloader.core.assist.ViewScaleType$1
-com.nostra13.universalimageloader.core.assist.deque.BlockingDeque
-com.nostra13.universalimageloader.core.assist.deque.Deque
-com.nostra13.universalimageloader.core.assist.deque.LIFOLinkedBlockingDeque
-com.nostra13.universalimageloader.core.assist.deque.LinkedBlockingDeque
-com.nostra13.universalimageloader.core.assist.deque.LinkedBlockingDeque$1
-com.nostra13.universalimageloader.core.assist.deque.LinkedBlockingDeque$AbstractItr
-com.nostra13.universalimageloader.core.assist.deque.LinkedBlockingDeque$DescendingItr
-com.nostra13.universalimageloader.core.assist.deque.LinkedBlockingDeque$Itr
-com.nostra13.universalimageloader.core.assist.deque.LinkedBlockingDeque$Node
-com.nostra13.universalimageloader.core.decode.BaseImageDecoder
-com.nostra13.universalimageloader.core.decode.BaseImageDecoder$ExifInfo
-com.nostra13.universalimageloader.core.decode.BaseImageDecoder$ImageFileInfo
-com.nostra13.universalimageloader.core.decode.ImageDecoder
-com.nostra13.universalimageloader.core.decode.ImageDecodingInfo
-com.nostra13.universalimageloader.core.display.BitmapDisplayer
-com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer
-com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer
-com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer$RoundedDrawable
-com.nostra13.universalimageloader.core.display.RoundedVignetteBitmapDisplayer
-com.nostra13.universalimageloader.core.display.RoundedVignetteBitmapDisplayer$RoundedVignetteDrawable
-com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer
-com.nostra13.universalimageloader.core.download.BaseImageDownloader
-com.nostra13.universalimageloader.core.download.BaseImageDownloader$1
-com.nostra13.universalimageloader.core.download.ImageDownloader
-com.nostra13.universalimageloader.core.download.ImageDownloader$Scheme
-com.nostra13.universalimageloader.core.imageaware.ImageAware
-com.nostra13.universalimageloader.core.imageaware.ImageViewAware
-com.nostra13.universalimageloader.core.imageaware.NonViewAware
-com.nostra13.universalimageloader.core.imageaware.ViewAware
-com.nostra13.universalimageloader.core.listener.ImageLoadingListener
-com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener
-com.nostra13.universalimageloader.core.listener.PauseOnScrollListener
-com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
-com.nostra13.universalimageloader.core.process.BitmapProcessor
-com.nostra13.universalimageloader.utils.DiskCacheUtils
-com.nostra13.universalimageloader.utils.ImageSizeUtils
-com.nostra13.universalimageloader.utils.ImageSizeUtils$1
-com.nostra13.universalimageloader.utils.IoUtils
-com.nostra13.universalimageloader.utils.IoUtils$CopyListener
-com.nostra13.universalimageloader.utils.L
-com.nostra13.universalimageloader.utils.MemoryCacheUtils
-com.nostra13.universalimageloader.utils.MemoryCacheUtils$1
-com.nostra13.universalimageloader.utils.StorageUtils
 com.umeng.analytics.AnalyticsConfig:
     7:7:public AnalyticsConfig()
     22:23:public static void enableEncrypt(boolean)
@@ -2155,6 +2052,45 @@ com.umeng.analytics.social.c
 com.umeng.analytics.social.d
 com.umeng.analytics.social.e
 com.umeng.analytics.social.f
+fr.castorflex.android.circularprogressbar.BuildConfig
+fr.castorflex.android.circularprogressbar.CircularProgressBar:
+    68:71:private fr.castorflex.android.circularprogressbar.CircularProgressDrawable checkIndeterminateDrawable()
+    75:76:public void progressiveStop()
+    79:80:public void progressiveStop(fr.castorflex.android.circularprogressbar.CircularProgressDrawable$OnEndListener)
+fr.castorflex.android.circularprogressbar.CircularProgressBarUtils:
+    12:13:private CircularProgressBarUtils()
+    36:38:static void checkPositive(int,java.lang.String)
+    41:43:static void checkNotNull(java.lang.Object,java.lang.String)
+fr.castorflex.android.circularprogressbar.CircularProgressDrawable:
+    private static final int ROTATION_ANIMATOR_DURATION
+    private static final int SWEEP_ANIMATOR_DURATION
+    private static final int END_ANIMATOR_DURATION
+    private fr.castorflex.android.circularprogressbar.CircularProgressDrawable$OnEndListener mOnEndListener
+    333:360:public void progressiveStop(fr.castorflex.android.circularprogressbar.CircularProgressDrawable$OnEndListener)
+    363:364:public void progressiveStop()
+    27:27:static synthetic android.animation.ValueAnimator access$1400(fr.castorflex.android.circularprogressbar.CircularProgressDrawable)
+    27:27:static synthetic fr.castorflex.android.circularprogressbar.CircularProgressDrawable$OnEndListener access$1500(fr.castorflex.android.circularprogressbar.CircularProgressDrawable)
+fr.castorflex.android.circularprogressbar.CircularProgressDrawable$8
+fr.castorflex.android.circularprogressbar.CircularProgressDrawable$Builder:
+    463:465:public fr.castorflex.android.circularprogressbar.CircularProgressDrawable$Builder style(fr.castorflex.android.circularprogressbar.CircularProgressDrawable$Style)
+    469:471:public fr.castorflex.android.circularprogressbar.CircularProgressDrawable$Builder sweepInterpolator(android.view.animation.Interpolator)
+    475:477:public fr.castorflex.android.circularprogressbar.CircularProgressDrawable$Builder angleInterpolator(android.view.animation.Interpolator)
+fr.castorflex.android.circularprogressbar.CircularProgressDrawable$OnEndListener
+fr.castorflex.android.circularprogressbar.R:
+    9:39:public R()
+fr.castorflex.android.circularprogressbar.R$attr:
+    10:10:public R$attr()
+fr.castorflex.android.circularprogressbar.R$color:
+    20:20:public R$color()
+fr.castorflex.android.circularprogressbar.R$dimen:
+    23:23:public R$dimen()
+fr.castorflex.android.circularprogressbar.R$integer:
+    26:26:public R$integer()
+fr.castorflex.android.circularprogressbar.R$string:
+    30:30:public R$string()
+fr.castorflex.android.circularprogressbar.R$style
+fr.castorflex.android.circularprogressbar.R$styleable:
+    39:39:public R$styleable()
 u.aly.a:
     80:81:public void a(u.aly.ay)
 u.aly.aa:

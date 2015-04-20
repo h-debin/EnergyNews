@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.energynews.app"
     android:versionCode="2"
-    android:versionName="1.1.0" >
+    android:versionName="1.1.1" >
 
     <uses-sdk
-        android:minSdkVersion="13"
+        android:minSdkVersion="14"
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -38,22 +38,6 @@
         </activity>
         <activity android:name="com.energynews.app.activity.NewsContentActivity" >
         </activity>
-        <activity
-            android:name="net.youmi.android.AdBrowser"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
-        </activity>
-
-        <service android:name="net.youmi.android.AdService" >
-        </service>
-
-        <receiver android:name="net.youmi.android.AdReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
 
         <meta-data
             android:name="UMENG_APPKEY"

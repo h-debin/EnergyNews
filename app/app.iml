@@ -89,8 +89,7 @@
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="view-pager-transforms-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="umeng-analytics-v5.4.2" level="project" />
-    <orderEntry type="library" exported="" name="YoumiSdk_v5.00_2015-01-08" level="project" />
-    <orderEntry type="library" exported="" name="universal-image-loader-1.9.3" level="project" />
+    <orderEntry type="library" exported="" name="library-circular-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="urlimageviewhelper-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />
   </component>
