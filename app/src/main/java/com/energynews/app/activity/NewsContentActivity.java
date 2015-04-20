@@ -5,10 +5,13 @@ import com.energynews.app.util.LogUtil;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 public class NewsContentActivity extends BaseActivity {
 
@@ -21,6 +24,8 @@ public class NewsContentActivity extends BaseActivity {
 		intent.putExtra("url", url);
 		context.startActivity(intent);
 	}
+
+    private static ProgressBar spinner;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +33,8 @@ public class NewsContentActivity extends BaseActivity {
 		LogUtil.d(DEBUG_TAG,"onCreate");
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.news_contant);
-		
+
+        spinner = (ProgressBar) findViewById(R.id.loading);
 		WebView webView = (WebView) findViewById(R.id.new_content_web_view);
 		webView.getSettings().setJavaScriptEnabled(true);		
 		webView.setWebViewClient(new WebViewClient() {
@@ -37,11 +43,45 @@ public class NewsContentActivity extends BaseActivity {
 				view.loadUrl(url);
 				return true;
 			}
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                LogUtil.d(DEBUG_TAG,"onPageStarted");
+                startProgress();
+                super.onPageStarted(view, url, favicon);
+            }
+            @Override
+            public void onPageFinished (WebView view, String url) {
+                LogUtil.d(DEBUG_TAG,"onPageFinished");
+                finishProgress();
+                super.onPageFinished(view, url);
+            }
+            @Override
+            public void onReceivedError (WebView view, int errorCode, String description, String failingUrl) {
+                LogUtil.d(DEBUG_TAG,"onReceivedError");
+                finishProgress();
+                super.onReceivedError(view, errorCode, description, failingUrl);
+            }
 		});
 		Intent intent = getIntent();
 		String url = intent.getStringExtra("url");
 		webView.loadUrl(url);
-		overridePendingTransition(R.anim.center_in, R.anim.center_out);
 	}
+
+    private void startProgress() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+    private void finishProgress() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setVisibility(View.GONE);
+            }
+        });
+    }
 	
 }

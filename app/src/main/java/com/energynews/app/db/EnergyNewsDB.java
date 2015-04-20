@@ -71,8 +71,7 @@ public class EnergyNewsDB {
 		if (TextUtils.isEmpty(emotionType)) {
 			return list;
 		}
-		Cursor cursor = db.rawQuery("select * from News where emotion_type = ? "
-				+ "and picture like 'http%' and old_news = 0 ORDER BY ? DESC", 
+		Cursor cursor = db.rawQuery("select * from News where emotion_type = ? " + "ORDER BY ? DESC",
 				new String[] {emotionType, "id"});
 		if (cursor.moveToFirst()) {
 			do {
@@ -81,13 +80,20 @@ public class EnergyNewsDB {
 				news.setTitle(cursor.getString(cursor.getColumnIndex("title")));
 				news.setLink(cursor.getString(cursor.getColumnIndex("link")));
 				news.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
-				news.setLeValue(cursor.getInt(cursor.getColumnIndex("le_value")));
-				news.setHaoValue(cursor.getInt(cursor.getColumnIndex("hao_value")));
-				news.setNuValue(cursor.getInt(cursor.getColumnIndex("nu_value")));
-				news.setAiValue(cursor.getInt(cursor.getColumnIndex("ai_value")));
-				news.setJuValue(cursor.getInt(cursor.getColumnIndex("ju_value")));
-				news.setEValue(cursor.getInt(cursor.getColumnIndex("e_value")));
-				news.setJingValue(cursor.getInt(cursor.getColumnIndex("jing_value")));
+                int count = cursor.getInt(cursor.getColumnIndex("le_value"))
+                        +cursor.getInt(cursor.getColumnIndex("hao_value"))
+                        +cursor.getInt(cursor.getColumnIndex("nu_value"))
+                        +cursor.getInt(cursor.getColumnIndex("ai_value"))
+                        +cursor.getInt(cursor.getColumnIndex("ju_value"))
+                        +cursor.getInt(cursor.getColumnIndex("e_value"))
+                        +cursor.getInt(cursor.getColumnIndex("jing_value"));
+                news.setLeValue(cursor.getInt(cursor.getColumnIndex("le_value")) * 100 / count);
+				news.setHaoValue(cursor.getInt(cursor.getColumnIndex("hao_value")) * 100 / count);
+				news.setNuValue(cursor.getInt(cursor.getColumnIndex("nu_value")) * 100 / count);
+				news.setAiValue(cursor.getInt(cursor.getColumnIndex("ai_value")) * 100 / count);
+				news.setJuValue(cursor.getInt(cursor.getColumnIndex("ju_value")) * 100 / count);
+				news.setEValue(cursor.getInt(cursor.getColumnIndex("e_value")) * 100 / count);
+				news.setJingValue(cursor.getInt(cursor.getColumnIndex("jing_value")) * 100 / count);
 				list.add(news);
 			} while (cursor.moveToNext());
 		}

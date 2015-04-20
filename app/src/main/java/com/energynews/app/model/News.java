@@ -91,49 +91,49 @@ public class News {
 	public void setLeValue(int leValue) {
 		this.leValue = leValue;
 		if (leValue != 0) {
-			String txt = "\n乐:" + Integer.toString(leValue);
+			String txt = "\n乐:";
 			addList(leValue, txt);
 		}
 	}
 	public void setHaoValue(int haoValue) {
 		this.haoValue = haoValue;
 		if (haoValue != 0) {
-			String txt = "\n好:" + Integer.toString(haoValue);
+			String txt = "\n好:";
 			addList(haoValue, txt);
 		}
 	}
 	public void setNuValue(int nuValue) {
 		this.nuValue = nuValue;
 		if (nuValue != 0) {
-			String txt = "\n怒:" + Integer.toString(nuValue);
+			String txt = "\n怒:";
 			addList(nuValue, txt);
 		}
 	}
 	public void setAiValue(int aiValue) {
 		this.aiValue = aiValue;
 		if (aiValue != 0) {
-			String txt = "\n哀:" + Integer.toString(aiValue);
+			String txt = "\n哀:";
 			addList(aiValue, txt);
 		}
 	}
 	public void setJuValue(int juValue) {
 		this.juValue = juValue;
 		if (juValue != 0) {
-			String txt = "\n惧:" + Integer.toString(juValue);
+			String txt = "\n惧:";
 			addList(juValue, txt);
 		}
 	}
 	public void setEValue(int eValue) {
 		this.eValue = eValue;
 		if (eValue != 0) {
-			String txt = "\n恶:" + Integer.toString(eValue);
+			String txt = "\n恶:";
 			addList(eValue, txt);
 		}
 	}
 	public void setJingValue(int jingValue) {
 		this.jingValue = jingValue;
 		if (jingValue != 0) {
-			String txt = "\n惊:" + Integer.toString(jingValue);
+			String txt = "\n惊:";
 			addList(jingValue, txt);
 		}
 	}
@@ -141,6 +141,7 @@ public class News {
 		this.updateTime = updateTime;
 	}
 	private void addList(int vl, String tx) {
+        tx += Integer.toString(vl) + "%";
 		ValueToText item = new ValueToText(vl, tx);
 		for (int i = 0; i < valueList.size(); i++) {
 			if (valueList.get(i).value < vl) {

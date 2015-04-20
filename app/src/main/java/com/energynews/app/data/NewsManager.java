@@ -9,10 +9,13 @@ import com.energynews.app.model.News;
 import com.energynews.app.util.LogUtil;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 public class NewsManager {
 	
 	private final static String DEBUG_TAG = "NewsManager";
+
+    private static Context mContext;
 	
 	public static final String API_ADRESS_PRE = "http://api.minghe.me/api/v1/news?emotion_type=";
 	public static final String[] EMOTION_TYPE = {"好","乐","怒","哀","惧","恶","惊"};
@@ -38,12 +41,11 @@ public class NewsManager {
 	 */
 	private NewsManager(Context context) {
 		LogUtil.d(DEBUG_TAG,"NewsManager");
+        mContext = context;
 		setCurrentEmotionTypeId(0);
 		setNewsId(-1);
 		db = EnergyNewsDB.getInstance(context);
-        for (int i = 0; i < EMOTION_TYPE.length; i++) {
-            newsListHead.add(new News());
-        }
+        initNewsListHead();
 	}
 	
 	/**
@@ -59,6 +61,11 @@ public class NewsManager {
 
     public static List<News> getNewsListHead() {
         LogUtil.d(DEBUG_TAG,"getNewsListHead");
+        for (News news : newsListHead) {
+            if (TextUtils.isEmpty(news.getPicture())) {
+
+            }
+        }
         return newsListHead;
     }
 	public static List<News> getNewsList() {
@@ -74,7 +81,7 @@ public class NewsManager {
 		newsList.add(news);
 	}
 	private void setCurrentEmotionTypeId(int emotionTypeId) {
-		LogUtil.d(DEBUG_TAG,"setCurrentEmotionTypeId");
+		LogUtil.d(DEBUG_TAG,"setCurrentEmotionTypeId currentEmotionTypeId = " + emotionTypeId);
 		//纪录当前选择的新闻索引
 		rememberEmotionLeaveId();
 		currentEmotionTypeId = emotionTypeId;
@@ -92,7 +99,19 @@ public class NewsManager {
 		LogUtil.d(DEBUG_TAG,"getCurrentEmotionType");
 		return EMOTION_TYPE[currentEmotionTypeId];
 	}
-    public synchronized void setNewsListHead() {
+    public synchronized void initNewsListHead() {
+        LogUtil.d(DEBUG_TAG,"initNewsListHead");
+        for (int i = 0; i < EMOTION_TYPE.length; i++) {
+            List<News> newslistLoad = db.queryNewsByEmotionType(EMOTION_TYPE[i]);
+            if (newslistLoad.size() > 0) {
+                newsListHead.add(newslistLoad.get(0));
+                continue;
+            }
+            newsListHead.add(new News());
+        }
+    }
+    public synchronized void updateNewsListHead() {
+        LogUtil.d(DEBUG_TAG,"updateNewsListHead");
         if (currentNewsId >= 0) {
             News news = newsList.get(currentNewsId);
             newsListHead.set(currentEmotionTypeId, news);
