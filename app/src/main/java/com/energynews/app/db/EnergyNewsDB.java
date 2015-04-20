@@ -59,6 +59,40 @@ public class EnergyNewsDB {
 		}
 		return energyNewsDB;
 	}
+
+    public void setNews(Cursor cursor, News news) {
+        news.setId(cursor.getInt(cursor.getColumnIndex("id")));
+        news.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+        news.setLink(cursor.getString(cursor.getColumnIndex("link")));
+        news.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+        int count = cursor.getInt(cursor.getColumnIndex("le_value"))
+                +cursor.getInt(cursor.getColumnIndex("hao_value"))
+                +cursor.getInt(cursor.getColumnIndex("nu_value"))
+                +cursor.getInt(cursor.getColumnIndex("ai_value"))
+                +cursor.getInt(cursor.getColumnIndex("ju_value"))
+                +cursor.getInt(cursor.getColumnIndex("e_value"))
+                +cursor.getInt(cursor.getColumnIndex("jing_value"));
+        news.setLeValue(cursor.getInt(cursor.getColumnIndex("le_value")) * 100 / count);
+        news.setHaoValue(cursor.getInt(cursor.getColumnIndex("hao_value")) * 100 / count);
+        news.setNuValue(cursor.getInt(cursor.getColumnIndex("nu_value")) * 100 / count);
+        news.setAiValue(cursor.getInt(cursor.getColumnIndex("ai_value")) * 100 / count);
+        news.setJuValue(cursor.getInt(cursor.getColumnIndex("ju_value")) * 100 / count);
+        news.setEValue(cursor.getInt(cursor.getColumnIndex("e_value")) * 100 / count);
+        news.setJingValue(cursor.getInt(cursor.getColumnIndex("jing_value")) * 100 / count);
+    }
+
+    public synchronized News queryNewsLast(String emotionType) {
+        LogUtil.d(DEBUG_TAG,"queryNewsLast");
+        News news = new News();
+        if (!TextUtils.isEmpty(emotionType)) {
+            Cursor cursor = db.rawQuery("select * from News where emotion_type = ? " + "ORDER BY ? DESC limit 1",
+                    new String[] {emotionType, "id"});
+            if (cursor.moveToFirst()) {
+                setNews(cursor, news);
+            }
+        }
+        return news;
+    }
 	
 	/**
 	 * 根据情绪类型查询数据库
@@ -76,24 +110,7 @@ public class EnergyNewsDB {
 		if (cursor.moveToFirst()) {
 			do {
 				News news = new News();
-				news.setId(cursor.getInt(cursor.getColumnIndex("id")));
-				news.setTitle(cursor.getString(cursor.getColumnIndex("title")));
-				news.setLink(cursor.getString(cursor.getColumnIndex("link")));
-				news.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
-                int count = cursor.getInt(cursor.getColumnIndex("le_value"))
-                        +cursor.getInt(cursor.getColumnIndex("hao_value"))
-                        +cursor.getInt(cursor.getColumnIndex("nu_value"))
-                        +cursor.getInt(cursor.getColumnIndex("ai_value"))
-                        +cursor.getInt(cursor.getColumnIndex("ju_value"))
-                        +cursor.getInt(cursor.getColumnIndex("e_value"))
-                        +cursor.getInt(cursor.getColumnIndex("jing_value"));
-                news.setLeValue(cursor.getInt(cursor.getColumnIndex("le_value")) * 100 / count);
-				news.setHaoValue(cursor.getInt(cursor.getColumnIndex("hao_value")) * 100 / count);
-				news.setNuValue(cursor.getInt(cursor.getColumnIndex("nu_value")) * 100 / count);
-				news.setAiValue(cursor.getInt(cursor.getColumnIndex("ai_value")) * 100 / count);
-				news.setJuValue(cursor.getInt(cursor.getColumnIndex("ju_value")) * 100 / count);
-				news.setEValue(cursor.getInt(cursor.getColumnIndex("e_value")) * 100 / count);
-				news.setJingValue(cursor.getInt(cursor.getColumnIndex("jing_value")) * 100 / count);
+                setNews(cursor, news);
 				list.add(news);
 			} while (cursor.moveToNext());
 		}

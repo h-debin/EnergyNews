@@ -102,12 +102,7 @@ public class NewsManager {
     public synchronized void initNewsListHead() {
         LogUtil.d(DEBUG_TAG,"initNewsListHead");
         for (int i = 0; i < EMOTION_TYPE.length; i++) {
-            List<News> newslistLoad = db.queryNewsByEmotionType(EMOTION_TYPE[i]);
-            if (newslistLoad.size() > 0) {
-                newsListHead.add(newslistLoad.get(0));
-                continue;
-            }
-            newsListHead.add(new News());
+            newsListHead.add(db.queryNewsLast(EMOTION_TYPE[i]));
         }
     }
     public synchronized void updateNewsListHead() {
@@ -209,29 +204,35 @@ public class NewsManager {
 
 	/**
 	 * 查询当前类型的数据是否存在
-	 * @param saveList 是否需要保存新闻列表
-	 *        newData 是否有了新数据,如果是,则索引设为-1,否则用之前记录的索引
+	 * @param newData 是否有了新数据,如果是,则索引设为-1,否则用之前记录的索引
 	 * @return 是否存在数据
 	 */
-	public boolean queryNewsList(boolean saveList, boolean newData) {
+	public boolean queryNewsList(boolean newData) {
 		LogUtil.d(DEBUG_TAG,"queryNewsList");
 		List<News> newslistLoad = db.queryNewsByEmotionType(getCurrentEmotionType());
 		if (newslistLoad.size() <= 0) {
 			return false;
 		}
-		if (saveList) {
-			resetNewsList();
-			for (News news : newslistLoad) {
-				addToNewsList(news);
-			}
-			if (newData) {
-				setNewsId(0);
-			} else {
-				setNewsId(EMOTION_LEAVE_ID[currentEmotionTypeId]);
-			}
-		}
+        resetNewsList();
+        for (News news : newslistLoad) {
+            addToNewsList(news);
+        }
+        if (newData) {
+            setNewsId(0);
+        } else {
+            setNewsId(EMOTION_LEAVE_ID[currentEmotionTypeId]);
+        }
 		return true;
 	}
+
+    /**
+     * 判断是否存在当前情绪新闻数据
+     * @return
+     */
+    public boolean isExistNews() {
+        News news = db.queryNewsLast(getCurrentEmotionType());
+        return !TextUtils.isEmpty(news.getLink());
+    }
 	
 	/**
 	 * 判断该情绪是否从服务器上更新过

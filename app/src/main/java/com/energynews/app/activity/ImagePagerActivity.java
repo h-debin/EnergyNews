@@ -119,7 +119,7 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
             @Override
             public void run() {
                 energyNewsDB.setOldNews(Utility.getDays() - 1);//设置一天之前的新闻为旧新闻
-                boolean exists = newsManager.queryNewsList(true, false);//从数据库中查询数据
+                boolean exists = newsManager.queryNewsList(false);//从数据库中查询数据
                 if (exists) {//存在数据
                     updateViewPager();//设置界面的数据
                 }
@@ -178,12 +178,12 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
      */
     private void requestSuccess(boolean saved) {
         LogUtil.d(DEBUG_TAG,"requestSuccess");
-        boolean exists = newsManager.queryNewsList(false, false);
+        boolean exists = newsManager.isExistNews();
         if (exists) {
             errorcount = 0;
             newsManager.setCurrentEmotionRequested();//纪录当前情绪已经被查找过
             if (saved) {
-                newsManager.queryNewsList(true, true);//有数据更新,则重新从数据库中获取数据,并保存获得的数据
+                newsManager.queryNewsList(true);//有数据更新,则重新从数据库中获取数据,并保存获得的数据
                 updateViewPager();
             }
         } else {
@@ -203,7 +203,7 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
         LogUtil.d(DEBUG_TAG,"changeEmotion");
         emotionChangeType = changeType;
         newsManager.changeEmotion(changeType);
-        boolean exits = newsManager.queryNewsList(true, false);
+        boolean exits = newsManager.queryNewsList(false);
         boolean isRequested = newsManager.isCurrentEmotionRequested();
         if (!exits) {//该情绪没有对应的新闻
             if (!isRequested) {//没有从服务器上查询过
