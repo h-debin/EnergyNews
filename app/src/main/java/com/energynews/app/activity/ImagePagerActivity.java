@@ -2,10 +2,13 @@ package com.energynews.app.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -47,6 +50,9 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
         context.startActivity(intent);
     }
 
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private final static String ISFIRSTLOAD = "is_first_load";
     private final static String NEWSLIST = "NEWSLIST";
     private final static String NEWSHEAD = "NEWSHEAD";
     private static String NEWS_SHOW_TYPE = NEWSHEAD;
@@ -74,8 +80,9 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_image_pager);
 
-        WindowManager wm = this.getWindowManager();
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
 
+        WindowManager wm = this.getWindowManager();
         xScreenCenter = wm.getDefaultDisplay().getWidth() / 2;
         yScreenCenter = wm.getDefaultDisplay().getHeight() / 2;
 
@@ -126,6 +133,14 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
                 queryFromServer(newsManager.getApiAddress());//从服务器上查找新数据
             }
         }).start();
+
+        if (pref.getBoolean(ISFIRSTLOAD, true)) {//第一次运行程序,打开helper窗口
+            editor = pref.edit();
+            editor.putBoolean(ISFIRSTLOAD, false);//记录已经打开过了
+            editor.commit();
+            showHelperActivity();
+        }
+        showHelperActivity();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -147,6 +162,10 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
                 //LogUtil.e(DEBUG_TAG, "updateViewPager current newsid = "+newsManager.getCurrentNewsId());
             }
         });
+    }
+
+    private void showHelperActivity() {
+        HelperActivity.startActivity(this);
     }
 
     private synchronized void showHorizonPager() {
@@ -179,7 +198,7 @@ public class ImagePagerActivity extends BaseActivity {//FragmentActivity
      */
     private void requestSuccess(boolean saved) {
         LogUtil.d(DEBUG_TAG,"requestSuccess");
-        boolean exists = newsManager.isExistNews();
+        boolean exists = newsManager.isExistNews(newsManager.getCurrentEmotionType());
         if (exists) {
             errorcount = 0;
             newsManager.setCurrentEmotionRequested();//纪录当前情绪已经被查找过

@@ -2,18 +2,25 @@
 <items version="2" >
 
     <item
-        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
-        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-0074e102e3b5affee1a1803545ffc1e66c050923.jar" />
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/classes-255d306ef1899d6f84ae5c0f5643ccdf8817c06d.jar" />
     </item>
     <item
-        jar="/home/aoshi/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.yalantis/contextmenu/1.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
-        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-d62d9593918a0af9d7ba561b5f5d3b63cafa22ac.jar" />
+        sha1="fffd36cea08006dcb23d7c0260b6b096a2557d09">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/classes-9949c981bea9e5869fd97929e28849b12d3091e2.jar" />
+    </item>
+    <item
+        jar="/home/aoshi/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/library-2.4.0-12805c823f36f10b6385373ca7ea2fa59114b33e.jar" />
     </item>
     <item
         jar="/home/aoshi/workspace/EnergyNews/app/libs/YoumiSdk_v5.00_2015-01-08.jar"
@@ -21,6 +28,27 @@
         revision="22.0.1"
         sha1="9a82405de8ad664118532d59f84e74fa574ffd40">
         <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/YoumiSdk_v5.00_2015-01-08-244255ed02194592fa615bdcf57e26d5bb25b13e.jar" />
+    </item>
+    <item
+        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="27bbd3982cdfe4468a9bf99c8c773734a9049e33">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-be4297e47bbebf51a79857de5dfe2df6b1705491.jar" />
+    </item>
+    <item
+        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-1abe073e60ea5a7b174b5b77f9ed860c2f71ba4f.jar" />
+    </item>
+    <item
+        jar="/home/aoshi/workspace/EnergyNews/app/libs/umeng-analytics-v5.4.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="75ef4894b1489017838dc57dbe9a5782ab12c427">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/umeng-analytics-v5.4.2-cb61c88fb0e5879860e28d37548fc3cb28ca68f2.jar" />
     </item>
     <item
         jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.1.0/classes.jar"
@@ -44,6 +72,13 @@
         <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/urlimageviewhelper-1.0.4-0f55f3470bf76b9b98e3eb73a7159f173e808136.jar" />
     </item>
     <item
+        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/classes-870e5da0ed41b5cc984b0527d933ca6d1ed3bfad.jar" />
+    </item>
+    <item
         jar="/home/aoshi/workspace/EnergyNews/app/libs/universal-image-loader-1.9.3.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -58,6 +93,13 @@
         <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/umeng-analytics-v5.4.2-cb61c88fb0e5879860e28d37548fc3cb28ca68f2.jar" />
     </item>
     <item
+        jar="/home/aoshi/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-92d9c11ac66e354218986a4a0d15ba9eaa25dd94.jar" />
+    </item>
+    <item
         jar="/home/aoshi/workspace/EnergyNews/app/libs/YoumiSdk_v5.00_2015-01-08.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -70,27 +112,6 @@
         revision="21.1.2"
         sha1="e128103d5281ddd26195a7f980b36d0d005a4e56">
         <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/classes-bc97bac76e324bbf72319bf09875ab8f6d52d773.jar" />
-    </item>
-    <item
-        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/libs/internal_impl-20.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="27bbd3982cdfe4468a9bf99c8c773734a9049e33">
-        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-be4297e47bbebf51a79857de5dfe2df6b1705491.jar" />
-    </item>
-    <item
-        jar="/home/aoshi/workspace/EnergyNews/app/libs/umeng-analytics-v5.4.2.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="75ef4894b1489017838dc57dbe9a5782ab12c427">
-        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/umeng-analytics-v5.4.2-cb61c88fb0e5879860e28d37548fc3cb28ca68f2.jar" />
-    </item>
-    <item
-        jar="/home/aoshi/workspace/EnergyNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
-        <dex dex="/home/aoshi/workspace/EnergyNews/app/build/intermediates/pre-dexed/debug/classes-893ff6ef36086b0741a0ee2ddfd5c7888c7523bc.jar" />
     </item>
     <item
         jar="/home/aoshi/workspace/EnergyNews/app/libs/urlimageviewhelper-1.0.4.jar"

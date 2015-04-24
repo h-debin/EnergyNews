@@ -3,6 +3,7 @@ package com.energynews.app.activity;
 import com.energynews.app.R;
 import com.energynews.app.util.LogUtil;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,7 +16,7 @@ import android.widget.ProgressBar;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class NewsContentActivity extends BaseActivity {
+public class NewsContentActivity extends Activity {
 
 	
 	private final static String DEBUG_TAG = "NewsContentActivity";

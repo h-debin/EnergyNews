@@ -29,9 +29,11 @@ public class NewsManager {
 	private int currentEmotionTypeId = 0;
 	private int currentNewsId = -1;//当前新闻在newsList中的索引
 	private int lastNewsId = -1;//上一个新闻在newsList中的索引
+    private int readedId = 0;//已经看过的新闻在列表中的索引
 
 	private static List<News> newsList = new ArrayList<News>();
     private static List<News> newsListHead = new ArrayList<News>();
+    private static List<String> readedNewsLinkList = new ArrayList<String>();
 	
 	private static NewsManager mNewsManager = null;
 	private static EnergyNewsDB db = null;
@@ -47,6 +49,18 @@ public class NewsManager {
 		db = EnergyNewsDB.getInstance(context);
         initNewsListHead();
 	}
+
+    @Override
+    protected void finalize() {
+        LogUtil.e(DEBUG_TAG,"finalize");
+        setDbReaded();
+    }
+
+    public synchronized void setDbReaded() {
+        for (String link : readedNewsLinkList) {
+            db.addToNewsReaded(link);
+        }
+    }
 	
 	/**
 	 * 获取EnergyNewsDB的实例。
@@ -59,13 +73,13 @@ public class NewsManager {
 		return mNewsManager;
 	}
 
+    public static String[] getEmotionType() {
+        LogUtil.d(DEBUG_TAG,"getEmotionType");
+        return EMOTION_TYPE;
+    }
+
     public static List<News> getNewsListHead() {
         LogUtil.d(DEBUG_TAG,"getNewsListHead");
-        for (News news : newsListHead) {
-            if (TextUtils.isEmpty(news.getPicture())) {
-
-            }
-        }
         return newsListHead;
     }
 	public static List<News> getNewsList() {
@@ -101,9 +115,22 @@ public class NewsManager {
 	}
     public synchronized void initNewsListHead() {
         LogUtil.d(DEBUG_TAG,"initNewsListHead");
+        initReadedNewsList();
         for (int i = 0; i < EMOTION_TYPE.length; i++) {
             newsListHead.add(db.queryNewsLast(EMOTION_TYPE[i]));
         }
+    }
+    public synchronized void initReadedNewsList() {
+        LogUtil.d(DEBUG_TAG,"initReadedNewsList");
+        List<String> list = db.getNewsReaded();
+        for (String link: list) {
+            if (!readedNewsLinkList.contains(link)) {
+                readedNewsLinkList.add(link);
+            }
+        }
+    }
+    public synchronized void resetReadedNewsList() {
+        readedNewsLinkList.clear();
     }
     public synchronized void updateNewsListHead() {
         LogUtil.d(DEBUG_TAG,"updateNewsListHead");
@@ -111,6 +138,20 @@ public class NewsManager {
             News news = newsList.get(currentNewsId);
             newsListHead.set(currentEmotionTypeId, news);
         }
+    }
+    public synchronized boolean updateNewsListHead(String emotionType) {
+        LogUtil.d(DEBUG_TAG,"updateNewsListHead(String emotionType)");
+        for (int i = 0; i < EMOTION_TYPE.length; i++) {
+            if (emotionType == EMOTION_TYPE[i]) {
+                News news = db.queryNewsLast(emotionType);
+                if (news.getLink() != newsListHead.get(i).getLink()) {
+                    newsListHead.set(i, news);
+                    return true;
+                }
+                break;
+            }
+        }
+        return false;
     }
 	public void setNewsId(int newsId) {
 		LogUtil.d(DEBUG_TAG,"setCurrentNewsId");
@@ -161,6 +202,18 @@ public class NewsManager {
 		address = API_ADRESS_PRE + address;
 		return address;
 	}
+
+    public String getApiAddress(String emotionType) {
+        LogUtil.d(DEBUG_TAG,"getApiAddress(String emotionType)");
+        String address = "";
+        try {
+            address = URLEncoder.encode(emotionType, "UTF-8");
+        } catch (Exception e) {
+            return address;
+        }
+        address = API_ADRESS_PRE + address;
+        return address;
+    }
 	/**
 	 * 转变情绪类型
 	 * @param changeType >=0 则+1, <0则-1
@@ -214,23 +267,35 @@ public class NewsManager {
 			return false;
 		}
         resetNewsList();
+        readedId = -1;
         for (News news : newslistLoad) {
+            if (news.isReaded() && readedId < 0) {
+                readedId = newslistLoad.indexOf(news);
+            }
+            if (!news.isReaded() && readedNewsLinkList.contains(news.getLink())) {
+                news.setReaded(1);
+            }
             addToNewsList(news);
         }
+        readedId = readedId < 0 ? 0 : readedId;
         if (newData) {
             setNewsId(0);
         } else {
             setNewsId(EMOTION_LEAVE_ID[currentEmotionTypeId]);
         }
+        updateNewsListHead();
 		return true;
 	}
+    public int getReadedId() {
+        return readedId;
+    }
 
     /**
      * 判断是否存在当前情绪新闻数据
      * @return
      */
-    public boolean isExistNews() {
-        News news = db.queryNewsLast(getCurrentEmotionType());
+    public boolean isExistNews(String emotionType) {
+        News news = db.queryNewsLast(emotionType);
         return !TextUtils.isEmpty(news.getLink());
     }
 	
@@ -248,5 +313,25 @@ public class NewsManager {
 			isEmotionRequested[currentEmotionTypeId] = true;
 		}
 	}
+    public void setEmotionRequested(String emotion) {
+        LogUtil.d(DEBUG_TAG,"setEmotionRequested");
+        for (int i = 0; i < EMOTION_TYPE.length; i++) {
+            if (emotion == EMOTION_TYPE[i]) {
+                isEmotionRequested[i] = true;
+                break;
+            }
+        }
+    }
+    public void resetEmotionRequested() {
+        for (int i = 0; i < EMOTION_TYPE.length; i++) {
+            isEmotionRequested[i] = false;
+        }
+        isEmotionRequested[currentEmotionTypeId] = true;
+    }
+    public void addReadedNews(News news) {
+        if (!readedNewsLinkList.contains(news.getLink())) {
+            readedNewsLinkList.add(news.getLink());
+        }
+    }
 
 }

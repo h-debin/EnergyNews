@@ -25,7 +25,7 @@ public class EnergyNewsDB {
 	/**
 	 * 数据库版本
 	 */
-	public static final int VERSION = 1;
+	public static final int VERSION = 2;
 	private static EnergyNewsDB energyNewsDB;
 	private SQLiteDatabase db;
 	
@@ -79,14 +79,15 @@ public class EnergyNewsDB {
         news.setJuValue(cursor.getInt(cursor.getColumnIndex("ju_value")) * 100 / count);
         news.setEValue(cursor.getInt(cursor.getColumnIndex("e_value")) * 100 / count);
         news.setJingValue(cursor.getInt(cursor.getColumnIndex("jing_value")) * 100 / count);
+        news.setReaded(cursor.getInt(cursor.getColumnIndex("readed")));
     }
 
     public synchronized News queryNewsLast(String emotionType) {
         LogUtil.d(DEBUG_TAG,"queryNewsLast");
         News news = new News();
         if (!TextUtils.isEmpty(emotionType)) {
-            Cursor cursor = db.rawQuery("select * from News where emotion_type = ? " + "ORDER BY ? DESC limit 1",
-                    new String[] {emotionType, "id"});
+            Cursor cursor = db.rawQuery("select * from News where emotion_type = ? order by readed, id desc limit 1",
+                    new String[] {emotionType});
             if (cursor.moveToFirst()) {
                 setNews(cursor, news);
             }
@@ -105,8 +106,8 @@ public class EnergyNewsDB {
 		if (TextUtils.isEmpty(emotionType)) {
 			return list;
 		}
-		Cursor cursor = db.rawQuery("select * from News where emotion_type = ? " + "ORDER BY ? DESC",
-				new String[] {emotionType, "id"});
+        String sqlSelect = "select * from News where emotion_type = ? order by readed, id desc";
+		Cursor cursor = db.rawQuery(sqlSelect, new String[] {emotionType});
 		if (cursor.moveToFirst()) {
 			do {
 				News news = new News();
@@ -155,6 +156,11 @@ public class EnergyNewsDB {
 		//删除1天前的记录
 		deleteOldNews(iDays - 1);
 	}
+    public synchronized void setReadedToNews(String link) {
+        LogUtil.d(DEBUG_TAG,"setOldNews");
+        String delSql = "update News set readed = 1 where link = ?";//标记新闻已经看过
+        db.execSQL(delSql, new String[]{link});
+    }
 	/**
 	 * 删除过期的新闻
 	 * iDays <iDays的纪录都删除
@@ -164,5 +170,41 @@ public class EnergyNewsDB {
 		String delSql = "delete from News where update_time < ?";
 		db.execSQL(delSql, new String[] {String.valueOf(iDays)});
 	}
+
+    public synchronized void addToNewsReaded(String link) {
+        LogUtil.d(DEBUG_TAG, "addNewsReaded");
+        Cursor cursor = db.rawQuery("select id from News_readed where link = ?", new String[] {link});
+        if (!cursor.moveToFirst()) {
+            db.execSQL("insert into News_readed (link) values(?)", new String[] {link});
+        }
+    }
+
+    public synchronized List<String> getNewsReaded() {
+        LogUtil.d(DEBUG_TAG,"getNewsReaded");
+        List<String> list = new ArrayList<String>();
+        String sqlSelect = "select link from News_readed";
+        Cursor cursor = db.rawQuery(sqlSelect, null);
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(cursor.getString(cursor.getColumnIndex("link")));
+            } while (cursor.moveToNext());
+        }
+        return list;
+    }
+
+    /**
+     * 把News_readed 表中的数据合入News 表中
+     */
+    public synchronized void mergeReadedToNews() {
+        LogUtil.d(DEBUG_TAG,"mergeReadedToNews");
+        Cursor cursor = db.rawQuery("select id from News_readed limit 1", null);
+        if (!cursor.moveToFirst()) {
+            return;
+        }
+        String updateSql = "update News set readed = 1 where link in (select link from News_readed)";
+        db.execSQL(updateSql, new String[]{});
+        String delSql = "delete from News_readed";
+        db.execSQL(delSql, new String[]{});
+    }
 
 }

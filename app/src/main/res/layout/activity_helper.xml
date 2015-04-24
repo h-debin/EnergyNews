@@ -1,0 +1,125 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:background="@drawable/corner_round"
+    tools:context="com.energynews.app.activity.HelperActivity">
+
+    <ScrollView
+        android:background="@drawable/corner_round"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:background="@color/menu_item_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView android:text="软件名称"
+                android:id="@+id/title_name"
+                android:textSize="16dp"
+                android:textColor="@color/text_color"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*心闻"/>
+
+
+            <TextView android:text="开发者"
+                android:id="@+id/title_developers"
+                android:textSize="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*日月文武"/>
+
+
+            <TextView android:text="功能介绍"
+                android:id="@+id/title_introduction"
+                android:textSize="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*心闻是一款新闻客服端,根据内容词性将新闻分为不同的情绪类别,用户可以选择自己情绪来浏览相关类别的新闻.随心看新闻,故名-心闻.程序启动显示新闻标题窗口,点击新闻标题可以查看新闻内容."
+                />
+
+            <TextView android:text="使用说明"
+                android:id="@+id/title_instructions"
+                android:textSize="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="#ffff212b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*上下滑动--改变情绪类型\n*左右滑动--改变相同情绪类型里的新闻"
+                />
+
+            <TextView android:text="声明"
+                android:id="@+id/title_statement"
+                android:textSize="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*才德所限,有很多不足之处.欢迎各路朋友提出改进建议."/>
+
+            <TextView android:text="联系方式"
+                android:id="@+id/title_email"
+                android:textSize="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="6dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="#fc8c2c68"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*邮箱:xinjidebin@163.com\n*微信:anshidebin"/>
+            </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

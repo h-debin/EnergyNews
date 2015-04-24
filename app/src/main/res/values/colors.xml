@@ -22,4 +22,8 @@
     <color name="holo_green_dark">#669900</color>
     <color name="holo_purple_dark">#9933cc</color>
     <color name="holo_red_dark">#cc0000</color>
+
+    <color name="text_red_dark">#FF860000</color>
+
+    <color name="text_color">#222222</color>
 </resources>

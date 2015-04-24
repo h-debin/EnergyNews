@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@drawable/corner_round">
 
     <fr.castorflex.android.circularprogressbar.CircularProgressBar
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +23,7 @@
         app:cpb_max_sweep_angle="300"
         />
 
-    <WebView 
+    <WebView
         android:id="@+id/new_content_web_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

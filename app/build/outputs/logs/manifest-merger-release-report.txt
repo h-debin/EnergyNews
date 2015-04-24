@@ -16,9 +16,12 @@ ADDED from AndroidManifest.xml:2:1
 uses-sdk
 ADDED from AndroidManifest.xml:7:5
 MERGED from com.android.support:support-v13:20.0.0:16:5
-MERGED from com.android.support:support-v4:20.0.0:16:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.1.0:23:5
 MERGED from com.github.castorflex.smoothprogressbar:library-circular:1.1.0:8:5
+MERGED from com.yalantis:contextmenu:1.0.3:7:5
+MERGED from com.android.support:appcompat-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 	android:targetSdkVersion
 		ADDED from AndroidManifest.xml:9:9
 		INJECTED from AndroidManifest.xml:0:0
@@ -68,8 +71,11 @@ ADDED from AndroidManifest.xml:20:5
 application
 ADDED from AndroidManifest.xml:24:5
 MERGED from com.android.support:support-v13:20.0.0:17:5
-MERGED from com.android.support:support-v4:20.0.0:17:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.github.castorflex.smoothprogressbar:library-circular:1.1.0:12:5
+MERGED from com.yalantis:contextmenu:1.0.3:11:5
+MERGED from com.android.support:appcompat-v7:21.0.3:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 	android:label
 		ADDED from AndroidManifest.xml:28:9
 	android:hardwareAccelerated
@@ -80,7 +86,7 @@ MERGED from com.github.castorflex.smoothprogressbar:library-circular:1.1.0:12:5
 		ADDED from AndroidManifest.xml:27:9
 	android:theme
 		ADDED from AndroidManifest.xml:29:9
-activity#com.energynews.app.activity.ImagePagerActivity
+activity#com.energynews.app.activity.MenuBaseActivity
 ADDED from AndroidManifest.xml:30:9
 	android:label
 		ADDED from AndroidManifest.xml:32:13
@@ -103,12 +109,18 @@ ADDED from AndroidManifest.xml:39:9
 meta-data#UMENG_APPKEY
 ADDED from AndroidManifest.xml:42:9
 	android:value
-		ADDED from AndroidManifest.xml:42:20
+		ADDED from AndroidManifest.xml:44:13
 	android:name
-		ADDED from AndroidManifest.xml:42:61
+		ADDED from AndroidManifest.xml:43:13
 meta-data#UMENG_CHANNEL
-ADDED from AndroidManifest.xml:43:9
+ADDED from AndroidManifest.xml:45:9
 	android:value
-		ADDED from AndroidManifest.xml:43:20
+		ADDED from AndroidManifest.xml:47:13
 	android:name
-		ADDED from AndroidManifest.xml:43:42
+		ADDED from AndroidManifest.xml:46:13
+activity#com.energynews.app.activity.HelperActivity
+ADDED from AndroidManifest.xml:49:9
+	android:label
+		ADDED from AndroidManifest.xml:51:13
+	android:name
+		ADDED from AndroidManifest.xml:50:13

@@ -20,11 +20,12 @@ public class News {
 	private int eValue;
 	private int jingValue;
 	private int updateTime;
+    private int readed;
 	
 	private List<ValueToText> valueList = new ArrayList<ValueToText>();
 	
 	public String getEmotion() {
-		String temp = "情绪指数";
+		String temp = "能量指数";
         int count = 0;
 		for (ValueToText item : valueList) {
 			temp += item.txt;
@@ -72,6 +73,9 @@ public class News {
 	public int getUpdateTime() {
 		return updateTime;
 	}
+    public boolean isReaded() {
+        return readed != 0;
+    }
 	
 	public void setId(int id) {
 		this.id = id;
@@ -140,6 +144,9 @@ public class News {
 	public void setUpdateTime(int updateTime) {
 		this.updateTime = updateTime;
 	}
+    public void setReaded(int read) {
+        readed = read;
+    }
 	private void addList(int vl, String tx) {
         tx += Integer.toString(vl) + "%";
 		ValueToText item = new ValueToText(vl, tx);

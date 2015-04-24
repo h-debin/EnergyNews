@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.energynews.app"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 21
     }
 
@@ -27,4 +27,5 @@ dependencies {
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.1.0@aar'
     //compile files('libs/universal-image-loader-1.9.3.jar')
     compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0@aar'
+    compile 'com.yalantis:contextmenu:1.0.3'
 }
